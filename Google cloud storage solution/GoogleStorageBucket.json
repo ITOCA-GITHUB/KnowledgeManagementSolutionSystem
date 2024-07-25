@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "fluid-fiber-430214-m0",
+  "private_key_id": "4f11f7d16f395d90f4f89dbe78fcee9db1a8a3d9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCf0lUUn+yc7Kcj\n7TjTkMKFt261Szpold15smPMLyDO34YuLH9nAE9UbyFtirlTYq/B5szfEqEtXRxi\nN4PxLQG+FNGHk65Nl2t0nr98GU0jDeQNMpxE8cupMcu3X+jCGIHrJCVGjPurxAGO\nrKe52aST4zY5AHlRfJTuGZ4UkpWpVbdCeOd6bRhq6oFV/kDhQlFY7p6nJSf+YhOc\nzJrXywzh0IsnmhoNWFGtZ+ZKA9zCRe7d3w2WXdfIbhWftKcwSLQJgmm/JCI43XJk\n0KCDU+r/bpMzhl1cyzZT2aPS23kiPGLP4HyRdJeL7bNTHvNlI9MDWHPkD4AqRlz0\nwzXoZ/xhAgMBAAECggEALCSmvk8bxg4xbiFoGDt8Fv3e1LFGHTwDk8j7epqrx6gC\ngj9lIxh5UNtvErgFzyvLWtW6UYTuQr7ch55I0bT6LbvHUdivBJxloCz2u7qrTRrZ\nmfGYKwzUEVQBLhGOEwo83Cs8JnvrSXqWaYdzvkgIhpZz1BO27pRn+EnYGVuRfdcQ\nyEG86cm7k3GdxAfYpMiSRG2SiQ0dOhzmZCRji6pmVuWkGSTLFU/vnA4Se8ah9nxT\nrsBA7pCnG4yK7zABTJKBVnIy15B9yx/biiNlz6XlDKc3Le/bcKCsqQj6fG7haB8c\nRnaDvD/1sCE10IE6FlwEyqc1sT34UtgUU5HaEIjbbwKBgQDOMC+Ev7hy6Vm/K1UT\nY4+v8Q8bE1IPw/659h3Pw5EsjUoekZLqLQC6QmGt1jHTrDopENSlvk0KfqUbUgH6\nigb0rsuRQg/eLQaPjg8St0+5a2z7fxAV5nmMH5AMhIEM5lHWH0dsjhLU1SqM1omX\nt/kHMIBjkp3MDb78D9W4SLeQCwKBgQDGbpSFsGwIrX8QMhdUujtJ21WjtucjPeoy\n2cLt9B3KDTRyh2gCoEFYskHjFzFS+Mf21PCruv6cu/gi1SQq/0lWEHc6jkzLl9kG\nvyc18XhFtZOjIUCjc75TEcrBA3MRfSQcY/Z6VSTSUaGDZIFaLuUD3FkEWrK3MKep\n0VvrmrZMwwKBgQCTbyUrWSP9FxrTdZq56IFAH7DbfW86Ur18H56lh4PxRX5waUuS\nI2fXx8usz/KFFyvnXV+QvIi+LlzFMliz26qpn6t0TLan+a4tTDk++tEJFuWw1+Sa\npFjZd2A7cywMG0z9PRSHbPfONDbeyjFMyYJKP8YubRJkbJfaCUCbK3QGjQKBgQCo\nDRitzEcCZmUZA0MtF3eEykPSHeHMv+/rVu82dSsRZnOHl1On/a65/mW8fHTibx1y\n1s5osjpV5P92CIrT+1ZRlCpVphQ1zIkZpKQBlFomt2usmUnT4/9I/OV454H5SsFd\nZe9llVxU3ptp2qGODe8YgPHGtUVrzcIBGPS/KUzA3wKBgAjbsVcJon+KgRkK2Ssc\neDBrYfBuYF3NSO/FOR7fMjWgva9MtEBRxvlQ9B7cduZnpGXvi04m+QqP4m7NHJae\nuhj+psR/JI9Ko/b6eGFphSZlfoCsif4bzSv/KgVW+EaMulNRaFi0ipCMqNzerjDx\n0Jy2atIjIDgZldUGb5seg5q5\n-----END PRIVATE KEY-----\n",
+  "client_email": "cloud-storage@fluid-fiber-430214-m0.iam.gserviceaccount.com",
+  "client_id": "108605404152157142274",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloud-storage%40fluid-fiber-430214-m0.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

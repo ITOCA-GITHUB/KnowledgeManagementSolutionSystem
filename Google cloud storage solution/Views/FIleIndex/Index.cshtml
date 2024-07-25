@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Google_cloud_storage_solution.Models.File_Index>
+
+@{
+    ViewData["Title"] = "File Index";
+}
+
+<h2>File Index</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Creator Email</th>
+            <th>Date Created</th>
+            <th>File Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var file in Model)
+        {
+            <tr>
+                <td>@file.Id</td>
+                <td>@file.name</td>
+                <td>@file.creator_email</td>
+                <td>@file.date_created</td>
+                <td>@file.file_type</td>
+            </tr>
+        }
+    </tbody>
+</table>

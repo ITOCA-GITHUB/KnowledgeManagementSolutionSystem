@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Google_cloud_storage_solution.Models.File_Path>
+
+@{
+    ViewData["Title"] = "File Paths";
+}
+
+<h2>File Paths</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var file in Model)
+        {
+            <tr>
+                <td>@file.Id</td>
+                <td>@file.Name</td>
+                <td><a href="@file.Link" target="_blank">View</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
