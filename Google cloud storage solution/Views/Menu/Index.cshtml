@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Google_cloud_storage_solution.Models.Menu>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <a class="navbar-brand" href="#">ITOCA_E_Learning_Platform</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            @if (Model != null)
+            {
+                @foreach (var menu in Model)
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-@menu.MenuId" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @menu.Title
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown-@menu.MenuId">
+                            @if (menu.MenuItems != null)
+                            {
+                                @foreach (var menuItem in menu.MenuItems)
+                                {
+                                    <a class="dropdown-item" href="@Url.Action("MenuItemDetails", "MenuItem", new { id = menuItem.MenuItemId })">@menuItem.Title</a>
+                                }
+                            }
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+        <a href="@Url.Action("CreateMenu", "Menu")" class="btn btn-primary ml-auto">Add Menu</a>
+        <a href="@Url.Action("CreateMenuItem", "Menu")" class="btn btn-secondary ml-2">Add Menu Item</a>
+    </div>
+</nav>
+
+<!-- Add these script tags to ensure Bootstrap JS and jQuery are included -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown();
+    });
+</script>

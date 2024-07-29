@@ -2,7 +2,55 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<style>
+    /* Add styles for your content */
+    .background-image {
+        /* Use CSS to set your background image */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-image: url('../images/background.jpg');
+        height: 75vh; /* Set the background height to cover the viewport */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .content {
+        background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent background */
+        padding: 40px;
+        border-radius: 40px;
+        max-width: 800px; /* Limit content width for readability */
+    }
+
+        .content h1 {
+            font-size: 3.5rem;
+            color: #333; /* Choose a suitable text color */
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            font-size: 1.25rem;
+            color: #555; /* Choose a suitable text color */
+        }
+
+    .btn-primary {
+        background-color: #007bff; /* Use a primary color for buttons */
+        color: #fff; /* Text color for buttons */
+        margin-top: 10px;
+    }
+</style>
+
+<div class="background-image">
+    <!-- This div will serve as the background -->
+    <div class="content">
+        <h1 class="display-4" style="font-weight: bold;">Welcome to ITOCA E Learning Platform</h1>
+        <p class="lead" style="font-weight: bold;">Unlock Your Knowledge: Seamless Material Access, Unforgettable Experiences!</p>
+        <a href="/Account/Login" class="btn btn-primary btn-lg">Tour Our ITOCA E Learning Platform</a>
+    </div>
 </div>
+
+

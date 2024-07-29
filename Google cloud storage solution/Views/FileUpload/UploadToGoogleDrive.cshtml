@@ -2,19 +2,40 @@
     ViewData["Title"] = "Upload to Google Drive";
 }
 
-<h2>Upload File to Google Drive</h2>
+<style>
+    .form-control-file {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 5px;
+        display: block;
+        width: 100%;
+    }
+</style>
 
-<form asp-action="UploadToGoogleDrive" asp-controller="FileUpload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" accept=".doc, .docx, .pdf, .xlsx, .pptx, .txt" />
-    <button type="submit">Upload</button>
-</form>
+<h2 class="text-center mt-4">Upload File to Google Drive</h2>
 
-@if (ViewBag.Message != null)
-{
-    <p>@ViewBag.Message</p>
-}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="UploadToGoogleDrive" asp-controller="FileUpload" method="post" enctype="multipart/form-data" class="border p-4 shadow-sm bg-light rounded">
+                <div class="form-group">
+                    <label for="file" class="font-weight-bold">Choose file to upload:</label>
+                    <input type="file" name="file" id="file" accept=".doc, .docx, .pdf, .xlsx, .pptx, .txt" class="form-control-file" />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-3">Upload</button>
+            </form>
 
-@if (ViewBag.GoogleDriveLink != null)
-{
-    <p>Google Drive Link: <a href="@ViewBag.GoogleDriveLink" target="_blank">@ViewBag.GoogleDriveLink</a></p>
-}
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-info mt-3">@ViewBag.Message</div>
+            }
+
+            @if (ViewBag.GoogleDriveLink != null)
+            {
+                <div class="alert alert-success mt-3">
+                    Google Drive Link: <a href="@ViewBag.GoogleDriveLink" target="_blank">@ViewBag.GoogleDriveLink</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

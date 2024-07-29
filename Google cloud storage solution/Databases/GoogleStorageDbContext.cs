@@ -17,7 +17,8 @@ namespace Google_cloud_storage_solution.Databases
         public DbSet<Users> Users { get; set; }
         public DbSet<UserSessions> UserSessions { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
-
+        public DbSet<Menu> Menu { get; set; }
+        public DbSet<MenuItem> MenuItem { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -32,15 +33,17 @@ namespace Google_cloud_storage_solution.Databases
             modelBuilder.Entity<File_Path>().HasKey(c => c.Name);
             modelBuilder.Entity<log_in_info>().HasKey(u => u.email);
             modelBuilder.Entity<Users>().HasKey(u => u.UserId);
-            modelBuilder.Entity<UserSessions>().HasKey(us => us.Id);
+            modelBuilder.Entity<UserSessions>().HasOne(us => us.User).WithMany().HasForeignKey(us => us.UserId).IsRequired();
             modelBuilder.Entity<UserActivity>().HasKey(z => z.Id);
+            modelBuilder.Entity<Menu>().HasKey(m => m.MenuId);
+            modelBuilder.Entity<MenuItem>().HasKey(mi => mi.MenuItemId);
+            modelBuilder.Entity<MenuItem>().HasOne(mi => mi.Menu).WithMany(m => m.MenuItems).HasForeignKey(mi => mi.MenuId).OnDelete(DeleteBehavior.Cascade);
         }
 
-         public async Task<string?> GetEmailByObjectNameAsync(string objectName)
+        public async Task<string?> GetEmailByUsernameAsync(string username)
         {
-            objectName = "tafadzwa@itoca.org";
-            var file = await LogInInfos.FirstOrDefaultAsync(f => f.email == objectName);
-            return file?.email;
+            var user = await Users.FirstOrDefaultAsync(u => u.UserName == username);
+            return user?.Email;
         }
     }
 }

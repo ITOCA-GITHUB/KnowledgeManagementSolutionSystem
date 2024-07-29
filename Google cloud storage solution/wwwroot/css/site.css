@@ -18,5 +18,62 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    background: url('../Images/Learning Background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
+
+.container {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.user-profile {
+    margin-left: 10px; /* Adjust margin as needed */
+}
+
+    .user-profile img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    .user-profile .user-details {
+        display: flex;
+        align-items: center;
+        color: #333;
+        cursor: pointer;
+    }
+
+        .user-profile .user-details .username {
+            margin-right: 5px;
+        }
+
+    .user-profile .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+    }
+
+        .user-profile .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+            .user-profile .dropdown-menu a:hover {
+                background-color: #f1f1f1;
+            }

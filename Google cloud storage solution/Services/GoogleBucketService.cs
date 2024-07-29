@@ -32,14 +32,13 @@ namespace Google_cloud_storage_solution.Services
 
         public async Task UpdateFilePermissionsAsync(string objectName, string email)
         {
-            objectName = "tafadzwa@itoca.org";
             var storageObject = await _storageClient.GetObjectAsync(_bucketName, objectName);
 
             var acl = storageObject.Acl ?? new List<ObjectAccessControl>();
             acl.Add(new ObjectAccessControl
             {
                 Entity = $"user-{email}",
-                Role = "Reader" // Or "OWNER" depending on your needs
+                Role = "READER" // Or "OWNER" depending on your needs
             });
             storageObject.Acl = acl;
 

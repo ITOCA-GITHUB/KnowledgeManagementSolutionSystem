@@ -93,11 +93,14 @@ namespace Google_cloud_storage_solution.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePermissions(string objectName)
         {
-            objectName = "tafadzwa@itoca.org";
-            var email = await _dbContext.GetEmailByObjectNameAsync(objectName);
-            if (email != null)
+            var username = HttpContext.Session.GetString("Username");
+            if (!string.IsNullOrEmpty(username))
             {
-                await _cloudStorageService.UpdateFilePermissionsAsync(objectName, email);
+                var email = await _dbContext.GetEmailByUsernameAsync(username);
+                if (!string.IsNullOrEmpty(email))
+                {
+                    await _cloudStorageService.UpdateFilePermissionsAsync(objectName, email);
+                }
             }
             return RedirectToAction("Index");
         }

@@ -31,7 +31,56 @@ namespace Google_cloud_storage_solution.Controllers
 
         public IActionResult Privacy()
         {
+            TimeTracking(nameof(Privacy));
             return View();
+        }
+
+        public IActionResult HomePage()
+        {
+            TimeTracking(nameof(HomePage));
+            var role = "Admin"; // Or retrieve the actual role from your authentication system
+            ViewData["Role"] = role;
+            return View();
+        }
+
+        public IActionResult AboutUs()
+        {
+            TimeTracking(nameof(AboutUs));
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            TimeTracking(nameof(Contact));
+            return View();
+        }
+
+        public IActionResult Terms()
+        {
+            TimeTracking(nameof(Terms));
+            return View();
+        }
+
+        public IActionResult Account()
+        {
+            TimeTracking(nameof(Account));
+            var userName = HttpContext.User.Identity.Name;
+            var user = _dbContext.Users.FirstOrDefault(u => u.UserName == userName);
+            return View(user);
+        }
+
+        public IActionResult Inbox()
+        {
+            TimeTracking(nameof(Inbox));
+            return View();
+        }
+
+        public IActionResult Settings()
+        {
+            TimeTracking(nameof(Settings));
+            var userName = HttpContext.User.Identity.Name;
+            var user = _dbContext.Users.FirstOrDefault(u => u.UserName == userName);
+            return View(user);
         }
 
         public IActionResult Logout()

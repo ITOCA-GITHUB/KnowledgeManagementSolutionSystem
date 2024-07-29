@@ -1,0 +1,25 @@
+﻿@model CreateMenuItemViewModel
+@{
+    var menus = ViewBag.Menus as List<Google_cloud_storage_solution.Models.Menu>;
+}
+
+<h2>Create Menu Item</h2>
+
+<form asp-action="CreateMenuItem" method="post">
+    <div class="form-group">
+        <label for="MenuId">Menu</label>
+        <select asp-for="MenuId" class="form-control" asp-items="@(new SelectList(menus, "MenuId", "Title"))"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Url"></label>
+        <input asp-for="Url" class="form-control" />
+        <span asp-validation-for="Url" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
