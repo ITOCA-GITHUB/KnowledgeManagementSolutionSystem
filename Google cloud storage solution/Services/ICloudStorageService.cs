@@ -4,5 +4,6 @@
     {
         Task UploadFileAsync(Stream fileStream, string fileName, string contentType);
         Task<string> GetFileUrlAsync(string fileName);
+        Task UpdateFilePermissionsAsync(string objectName, string email);
     }
 }

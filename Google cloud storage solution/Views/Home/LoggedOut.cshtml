@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Logged Out";
+}
+
+<style>
+    .container {
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        text-align: center;
+        border: 5px solid dodgerblue;
+        border-radius: 10px;
+        background-color: black;
+        color: white;
+    }
+
+        .container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .container p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="container">
+    <h1>You have been logged out</h1>
+    <p>Please <a asp-action="Login" asp-controller="Account" class="btn">log in</a> again to continue.</p>
+</div>
+
+<script>
+    // Prevent going back to authenticated pages
+    window.onpageshow = function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+            window.location.href = '@Url.Action("AccessDenied", "Account")';
+        }
+    };
+</script>

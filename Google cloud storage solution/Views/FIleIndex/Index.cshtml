@@ -1,31 +1,125 @@
 ﻿@model IEnumerable<Google_cloud_storage_solution.Models.File_Index>
 
-@{
-    ViewData["Title"] = "File Index";
-}
-
-<h2>File Index</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Creator Email</th>
-            <th>Date Created</th>
-            <th>File Type</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var file in Model)
-        {
-            <tr>
-                <td>@file.Id</td>
-                <td>@file.name</td>
-                <td>@file.creator_email</td>
-                <td>@file.date_created</td>
-                <td>@file.file_type</td>
-            </tr>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Index</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: Arial, sans-serif;
         }
-    </tbody>
-</table>
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .filter-form {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+            .filter-form label {
+                font-weight: bold;
+            }
+
+            .filter-form select,
+            .filter-form input {
+                margin-bottom: 10px;
+            }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
+            .btn-custom:hover {
+                background-color: #0056b3;
+            }
+
+        table {
+            background: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            table th,
+            table td {
+                padding: 12px;
+                text-align: left;
+            }
+
+            table thead {
+                background-color: #007bff;
+                color: #fff;
+            }
+
+            table tbody tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="get" asp-controller="FileIndex" asp-action="Index" class="filter-form">
+            <div class="form-group">
+                <label for="fileType">File Type:</label>
+                <select id="fileType" name="fileType" class="form-control">
+                    <option value="">All</option>
+                    <option value="pdf">PDF</option>
+                    <option value="docx">DOCX</option>
+                    <option value="jpg">JPG</option>
+                    <option value="mkv">MKV</option>
+                    <!-- Add other options as needed -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="fileName">File Name:</label>
+                <input type="text" id="fileName" name="fileName" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="sortOrder">Sort By:</label>
+                <select id="sortOrder" name="sortOrder" class="form-control">
+                    <option value="name_asc">Name Ascending</option>
+                    <option value="name_desc">Name Descending</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-custom">Search</button>
+        </form>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>File Type</th>
+                    <th>Creator Email</th>
+                    <th>Date Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var file in Model)
+                {
+                    <tr>
+                        <td>@file.name</td>
+                        <td>@file.file_type</td>
+                        <td>@file.creator_email</td>
+                        <td>@file.date_created</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

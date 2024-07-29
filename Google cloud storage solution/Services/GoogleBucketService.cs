@@ -1,4 +1,5 @@
 ﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
 
 namespace Google_cloud_storage_solution.Services
@@ -27,6 +28,22 @@ namespace Google_cloud_storage_solution.Services
             GoogleCredential.FromFile("GoogleStorageBucket.json").UnderlyingCredential as ServiceAccountCredential);
             var signedUrl = await urlSigner.SignAsync(_bucketName, fileName, TimeSpan.FromHours(1), HttpMethod.Get);
             return signedUrl;
+        }
+
+        public async Task UpdateFilePermissionsAsync(string objectName, string email)
+        {
+            objectName = "tafadzwa@itoca.org";
+            var storageObject = await _storageClient.GetObjectAsync(_bucketName, objectName);
+
+            var acl = storageObject.Acl ?? new List<ObjectAccessControl>();
+            acl.Add(new ObjectAccessControl
+            {
+                Entity = $"user-{email}",
+                Role = "Reader" // Or "OWNER" depending on your needs
+            });
+            storageObject.Acl = acl;
+
+            await _storageClient.UpdateObjectAsync(storageObject);
         }
     }
 }

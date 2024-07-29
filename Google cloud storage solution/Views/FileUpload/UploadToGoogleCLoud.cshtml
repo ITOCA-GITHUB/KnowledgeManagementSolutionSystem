@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Upload to Google Cloud Storage";
+}
+
+<h2>Google Cloud Image and Video Upload</h2>
+
+<form asp-action="UploadToGoogleCloud" asp-controller="FileUpload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".mp4, .mpeg, .mkv, .wmv, .jpg, .jpeg, .png, .gif, .bmp, .tiff, .webp" />
+    <button type="submit">Upload</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}
