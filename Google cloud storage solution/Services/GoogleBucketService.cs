@@ -21,11 +21,10 @@ namespace Google_cloud_storage_solution.Services
             await _storageClient.UploadObjectAsync(_bucketName, fileName, contentType, fileStream);
         }
 
-        [Obsolete]
         public async Task<string> GetFileUrlAsync(string fileName)
         {
             var urlSigner = UrlSigner.FromServiceAccountCredential(
-            GoogleCredential.FromFile("GoogleStorageBucket.json").UnderlyingCredential as ServiceAccountCredential);
+                GoogleCredential.FromFile("GoogleStorageBucket.json").UnderlyingCredential as ServiceAccountCredential);
             var signedUrl = await urlSigner.SignAsync(_bucketName, fileName, TimeSpan.FromHours(1), HttpMethod.Get);
             return signedUrl;
         }
@@ -34,13 +33,15 @@ namespace Google_cloud_storage_solution.Services
         {
             var storageObject = await _storageClient.GetObjectAsync(_bucketName, objectName);
             var acl = storageObject.Acl ?? new List<ObjectAccessControl>();
+
+            // Add or update ACL entry for the specified email
             acl.Add(new ObjectAccessControl
             {
-                Entity = $"user-{"admin@itoca.org"}",
-                Role = "READER" // Or "OWNER" depending on your needs
+                Entity = $"user-{email}",
+                Role = "READER" // Change to "OWNER" if needed
             });
-            storageObject.Acl = acl;
 
+            storageObject.Acl = acl;
             await _storageClient.UpdateObjectAsync(storageObject);
         }
     }

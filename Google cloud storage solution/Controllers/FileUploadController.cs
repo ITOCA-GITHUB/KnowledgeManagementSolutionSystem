@@ -90,6 +90,12 @@ namespace Google_cloud_storage_solution.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult UpdatePermissions()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> UpdatePermissions(string objectName)
         {
@@ -100,9 +106,18 @@ namespace Google_cloud_storage_solution.Controllers
                 if (!string.IsNullOrEmpty(email))
                 {
                     await _cloudStorageService.UpdateFilePermissionsAsync(objectName, email);
+                    ViewBag.Message = "Permissions updated successfully.";
+                }
+                else
+                {
+                    ViewBag.Message = "Email not found for the user.";
                 }
             }
-            return RedirectToAction("Index");
+            else
+            {
+                ViewBag.Message = "Username not found in session.";
+            }
+            return View();
         }
     }
 }

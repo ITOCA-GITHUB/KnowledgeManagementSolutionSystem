@@ -68,6 +68,26 @@
             </div>
         </section>
 
+        <div class="container mt-4">
+            <div id="uploadToGoogleCloud">
+                <h2>Upload to Google Cloud Storage</h2>
+                <p>Use this section to upload your files to Google Cloud Storage. Supported file types include .mp4, .mpeg, .mkv, .wmv, .jpg, .jpeg, .png, .gif, .bmp, .tiff, .webp.</p>
+                <a href=@Url.Action("UploadToGoogleCLoud", "FileUpload") class="btn btn-primary">Go to Upload Page</a>
+            </div>
+
+            <div id="updatePermissions" class="mt-4">
+                <h2>Update Permissions</h2>
+                <p>Use this section to update the permissions of files stored in Google Cloud Storage. You can assign viewer or editor roles to specific users.</p>
+                <a href=@Url.Action("UpdatePermissions", "FileUpload") class="btn btn-primary">Go to Permissions Page</a>
+            </div>
+
+            <div id="uploadToGoogleDrive" class="mt-4">
+                <h2>Upload to Google Drive</h2>
+                <p>Use this section to upload your files to Google Drive. Supported file types include .doc, .docx, .pdf, .xlsx, .pptx, .txt.</p>
+                <a href=@Url.Action("UploadToGoogleDrive", "FileUpload") class="btn btn-primary">Go to Upload Page</a>
+            </div>
+        </div>
+
         <section id="courses">
             <h2>Our Courses</h2>
             <p>Explore our extensive range of courses in Technology, Cybersecurity, Data Science, and Networking.</p>
@@ -75,7 +95,6 @@
         <section id="testimonials">
             <h2>Testimonials</h2>
             <p>Read what our students have to say about their experience at ITOCA.</p>
-            https://storage.cloud.google.com/kms_cloud_storage/Fara%20card.jpg?authuser=1
         </section>
     </main>
 </div>

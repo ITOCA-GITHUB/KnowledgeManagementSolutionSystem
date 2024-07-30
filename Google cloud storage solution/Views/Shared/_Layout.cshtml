@@ -142,11 +142,25 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="FilePath" asp-action="Index">Filex Path</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="FileUpload" asp-action="UploadToGoogleCLoud">GoogleCloud File Upload</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="googleCloudDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Google Cloud
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="googleCloudDropdown">
+                                        <a class="dropdown-item" asp-controller="FileUpload" asp-action="UploadToGoogleCLoud">Upload to Google Cloud</a>
+                                        <a class="dropdown-item" asp-controller="FileUpload" asp-action="UpdatePermissions">Update Permissions</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="googleDriveDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Google Drive
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="googleDriveDropdown">
+                                        <a class="dropdown-item" asp-controller="FileUpload" asp-action="UploadToGoogleDrive">Upload to Google Drive</a>
+                                    </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="FileUpload" asp-action="UploadToGoogleDrive">GoogleDrive File Upload</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="FileAccess" asp-action="EditAccess">File Permissions</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
@@ -193,11 +207,25 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="FilePath" asp-action="Index">Filex Path</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="FileUpload" asp-action="UploadToGoogleCLoud">GoogleCloud File Upload</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="googleCloudDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Google Cloud
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="googleCloudDropdown">
+                                        <a class="dropdown-item" asp-controller="FileUpload" asp-action="UploadToGoogleCLoud">Upload to Google Cloud</a>
+                                        <a class="dropdown-item" asp-controller="FileUpload" asp-action="UpdatePermissions">Update Permissions</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="googleDriveDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Google Drive
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="googleDriveDropdown">
+                                        <a class="dropdown-item" asp-controller="FileUpload" asp-action="UploadToGoogleDrive">Upload to Google Drive</a>
+                                    </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="FileUpload" asp-action="UploadToGoogleDrive">GoogleDrive File Upload</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="FileUpload" asp-action="UpdatePermissions">Update File Permissions</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
@@ -255,6 +283,30 @@
             var dropdownMenu = document.getElementById('dropdownMenu');
             dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
         }
+
+        $(document).ready(function () {
+            $('#googleCloudDropdown').on('click', function (event) {
+                event.preventDefault();
+                $(this).next('.dropdown-menu').toggle();
+                $('#googleDriveDropdown').next('.dropdown-menu').hide(); // Hide the other dropdown
+            });
+
+            $('#googleDriveDropdown').on('click', function (event) {
+                event.preventDefault();
+                $(this).next('.dropdown-menu').toggle();
+                $('#googleCloudDropdown').next('.dropdown-menu').hide(); // Hide the other dropdown
+            });
+
+            $(document).on('click', function (event) {
+                if (!$(event.target).closest('#googleCloudDropdown').length) {
+                    $('#googleCloudDropdown').next('.dropdown-menu').hide();
+                }
+                if (!$(event.target).closest('#googleDriveDropdown').length) {
+                    $('#googleDriveDropdown').next('.dropdown-menu').hide();
+                }
+            });
+        });
+
     </script>
 </body>
 </html>

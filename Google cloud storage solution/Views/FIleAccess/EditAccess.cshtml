@@ -1,0 +1,20 @@
+﻿@model Google_cloud_storage_solution.Models.EditAccessViewModel
+
+<form asp-action="EditAccess" method="post">
+    <div>
+        <label for="FileName">File Name</label>
+        <input type="text" id="FileName" name="FileName" value="@Model.FileName" />
+    </div>
+    <div>
+        <label for="UserEmail">User Email</label>
+        <input type="email" id="UserEmail" name="UserEmail" required />
+    </div>
+    <div>
+        <label for="AccessType">Access Type</label>
+        <select id="AccessType" name="AccessType">
+            <option value="READER">Reader</option>
+            <option value="OWNER">Owner</option>
+        </select>
+    </div>
+    <button type="submit">Update Access</button>
+</form>
