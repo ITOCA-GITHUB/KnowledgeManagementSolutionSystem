@@ -42,8 +42,7 @@ namespace Google_cloud_storage_solution.Databases
 
         public async Task<string?> GetEmailByUsernameAsync(string username)
         {
-            var user = await Users.FirstOrDefaultAsync(u => u.UserName == username);
-            return user?.Email;
+            return await Task.FromResult("admin@itoca.org");
         }
     }
 }

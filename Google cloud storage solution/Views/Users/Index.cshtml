@@ -4,6 +4,51 @@
     ViewData["Title"] = "Index";
 }
 
+<style>
+    /* Reset default margin and padding */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Apply styles to the table */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .table th, .table td {
+            border: 3px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            font-size: 20px; /* Changed font size to 20px */
+            color: black; /* Changed text color to black */
+        }
+
+        .table th {
+            background-color: #007bff; /* Added background color to header */
+            color: white;
+            font-size: 18px; /* Changed heading size to 18px */
+        }
+
+    /* Style the "Create New" button */
+    .create-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+        .create-button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
 <h1>Index</h1>
 
 <p>

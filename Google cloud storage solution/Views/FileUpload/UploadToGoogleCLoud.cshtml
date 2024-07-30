@@ -2,14 +2,34 @@
     ViewData["Title"] = "Upload to Google Cloud Storage";
 }
 
-<h2>Google Cloud Image and Video Upload</h2>
+<style>
+    .form-control-file {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 5px;
+        display: block;
+        width: 100%;
+    }
+</style>
 
-<form asp-action="UploadToGoogleCloud" asp-controller="FileUpload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" accept=".mp4, .mpeg, .mkv, .wmv, .jpg, .jpeg, .png, .gif, .bmp, .tiff, .webp" />
-    <button type="submit">Upload</button>
-</form>
+<h2 class="text-center mt-4">Google Cloud Image and Video Upload</h2>
 
-@if (ViewBag.Message != null)
-{
-    <p>@ViewBag.Message</p>
-}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="UploadToGoogleCloud" asp-controller="FileUpload" method="post" enctype="multipart/form-data" class="border p-4 shadow-sm bg-light rounded">
+                <div class="form-group">
+                    <label for="file" class="font-weight-bold">Choose image or video to upload:</label>
+                    <input type="file" name="file" id="file" accept=".mp4, .mpeg, .mkv, .wmv, .jpg, .jpeg, .png, .gif, .bmp, .tiff, .webp" class="form-control-file" />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-3">Upload</button>
+            </form>
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-info mt-3">@ViewBag.Message</div>
+            }
+        </div>
+    </div>
+</div>
+

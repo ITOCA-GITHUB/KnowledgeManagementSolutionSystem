@@ -6,4 +6,5 @@
         Task<string> GetFileUrlAsync(string fileName);
         Task UpdateFilePermissionsAsync(string objectName, string email);
     }
+
 }
