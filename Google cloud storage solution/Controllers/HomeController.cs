@@ -94,7 +94,7 @@ namespace Google_cloud_storage_solution.Controllers
                 var loginTime = _dbContext.UserSessions
                     .Where(us => us.UserId == user.UserId && us.LogoutTime == null)
                     .OrderByDescending(us => us.LoginTime)
-                .Select(us => us.LoginTime)
+                    .Select(us => us.LoginTime)
                     .FirstOrDefault();
 
                 var duration = currentTime - loginTime;
