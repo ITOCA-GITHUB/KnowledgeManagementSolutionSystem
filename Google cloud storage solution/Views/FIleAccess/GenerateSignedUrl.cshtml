@@ -1,0 +1,42 @@
+﻿@model Google_cloud_storage_solution.Models.GenerateSignedUrlViewModel
+
+@{
+    ViewData["Title"] = "Generate Signed URL";
+}
+
+<h2>Generate Signed URL</h2>
+
+<form asp-action="GenerateSignedUrl" method="post">
+    <div class="form-group">
+        <label asp-for="FileName" class="control-label"></label>
+        <input asp-for="FileName" class="form-control" />
+        <span asp-validation-for="FileName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Generate URL" class="btn btn-primary" />
+    </div>
+</form>
+
+@if (ViewBag.SignedUrl != null)
+{
+    <div class="alert alert-success">
+        <strong>Signed URL:</strong> <a href="@ViewBag.SignedUrl" target="_blank">@ViewBag.SignedUrl</a>
+    </div>
+}
+else if (ViewBag.Message != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @ViewBag.Message
+    </div>
+}
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

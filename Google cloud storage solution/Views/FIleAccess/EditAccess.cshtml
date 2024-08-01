@@ -1,20 +1,54 @@
 ﻿@model Google_cloud_storage_solution.Models.EditAccessViewModel
 
+@{
+    ViewData["Title"] = "Edit Access";
+}
+
+<h2>Edit Access</h2>
+
 <form asp-action="EditAccess" method="post">
-    <div>
-        <label for="FileName">File Name</label>
-        <input type="text" id="FileName" name="FileName" value="@Model.FileName" />
+    <div class="form-group">
+        <label asp-for="FileName" class="control-label"></label>
+        <input asp-for="FileName" class="form-control" />
+        <span asp-validation-for="FileName" class="text-danger"></span>
     </div>
-    <div>
-        <label for="UserEmail">User Email</label>
-        <input type="email" id="UserEmail" name="UserEmail" required />
-    </div>
-    <div>
-        <label for="AccessType">Access Type</label>
-        <select id="AccessType" name="AccessType">
-            <option value="READER">Reader</option>
-            <option value="OWNER">Owner</option>
+    <div class="form-group">
+        <label asp-for="UserId" class="control-label">User</label>
+        <select asp-for="UserId" class="form-control">
+            @if (ViewBag.Users != null)
+            {
+                @foreach (var user in ViewBag.Users as List<Google_cloud_storage_solution.Models.Users>)
+                {
+                    <option value="@user.UserId">@user.Email</option>
+                }
+            }
         </select>
+        <span asp-validation-for="UserId" class="text-danger"></span>
     </div>
-    <button type="submit">Update Access</button>
+    <div class="form-group">
+        <label asp-for="AccessType" class="control-label"></label>
+        <select asp-for="AccessType" class="form-control">
+            @if (ViewBag.AccessTypes != null)
+            {
+                @foreach (var accessType in ViewBag.AccessTypes as List<string>)
+                {
+                    <option value="@accessType">@accessType</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="AccessType" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
 </form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
