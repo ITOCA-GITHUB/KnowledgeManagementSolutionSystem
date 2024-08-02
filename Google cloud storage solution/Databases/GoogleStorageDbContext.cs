@@ -11,7 +11,8 @@ namespace Google_cloud_storage_solution.Databases
         {
             _configuration = configuration;
         }
-        public DbSet<log_in_info> LogInInfos { get; set; }
+
+        public DbSet<Cloud_File_Index> cloud_File_Index { get; set; }
         public DbSet<File_Index> file_index { get; set; }
         public DbSet<File_Path> file_paths { get; set; }
         public DbSet<Users> Users { get; set; }
@@ -29,9 +30,9 @@ namespace Google_cloud_storage_solution.Databases
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Cloud_File_Index>().ToTable("cloud_file_index");
             modelBuilder.Entity<File_Index>().HasKey(f => f.Id);
             modelBuilder.Entity<File_Path>().HasKey(c => c.Name);
-            modelBuilder.Entity<log_in_info>().HasKey(u => u.email);
             modelBuilder.Entity<Users>().HasKey(u => u.UserId);
             modelBuilder.Entity<UserSessions>().HasOne(us => us.User).WithMany().HasForeignKey(us => us.UserId).IsRequired();
             modelBuilder.Entity<UserActivity>().HasKey(z => z.Id);

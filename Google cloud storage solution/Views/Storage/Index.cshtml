@@ -1,0 +1,72 @@
+﻿@model List<Google_cloud_storage_solution.Services.StorageObject>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .fa-folder, .fa-file {
+        margin-right: 8px;
+    }
+</style>
+
+@{
+    var prefix = ViewBag.Prefix as string ?? "";
+    var prefixPath = prefix.Split('/').Where(p => !string.IsNullOrEmpty(p)).ToList();
+}
+
+
+<div>
+    @if (prefixPath.Any())
+    {
+        <a href="@Url.Action("Index", new { prefix = string.Join("/", prefixPath.Take(prefixPath.Count - 1)) })">Up</a>
+    }
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Last Modified</th>
+                <th>Size</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (item.IsFolder)
+                        {
+                            <a href="@Url.Action("Index", new { prefix = item.Name })">
+                                <i class="fa fa-folder"></i> @item.Name.TrimEnd('/')
+                            </a>
+                        }
+                        else
+                        {
+                            <i class="fa fa-file"></i> @item.Name
+                        }
+                    </td>
+                    <td>@item.LastModified?.ToString()</td>
+                    <td>@item.Size?.ToString("N0")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dR3n2nEsdZZ+6neUXE5sMOPVBGZwA1fjHc9LpB90Yow9jXmyGkK7iVfhI/S2NV6Qx1cFZbLgFWc5hB7cdK+zPg==" crossorigin="anonymous" referrerpolicy="no-referrer" />

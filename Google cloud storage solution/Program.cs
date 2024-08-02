@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<GoogleStorageDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("GoogleStorageDatabaseConnection")));
 builder.Services.AddSingleton<ICloudStorageService>(new GoogleCloudStorageService("kms_cloud_storage"));
+builder.Services.AddSingleton<GoogleCloudStorageService>(provider =>
+        new GoogleCloudStorageService("kms_cloud_storage"));
 builder.Services.AddSingleton<GoogleDriveService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
