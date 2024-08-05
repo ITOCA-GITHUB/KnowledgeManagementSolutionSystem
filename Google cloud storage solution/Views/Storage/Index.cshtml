@@ -14,14 +14,30 @@
 
     th {
         background-color: #f2f2f2;
+        text-align: left;
     }
 
     tr:hover {
         background-color: #f5f5f5;
     }
 
-    .fa-folder, .fa-file {
-        margin-right: 8px;
+    .breadcrumb {
+        margin-bottom: 15px;
+    }
+
+        .breadcrumb a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+            .breadcrumb a:hover {
+                text-decoration: underline;
+            }
+
+    .icon {
+        width: 16px; /* Set the desired width */
+        height: 16px; /* Set the desired height */
+        margin-right: 8px; /* Optional: add some space between the icon and the text */
     }
 </style>
 
@@ -30,6 +46,20 @@
     var prefixPath = prefix.Split('/').Where(p => !string.IsNullOrEmpty(p)).ToList();
 }
 
+<div class="breadcrumb">
+    @if (prefixPath.Any())
+    {
+        for (int i = 0; i < prefixPath.Count; i++)
+        {
+            var path = string.Join("/", prefixPath.Take(i + 1));
+            <a href="@Url.Action("Index", new { prefix = path })">@prefixPath[i]</a>
+            @if (i < prefixPath.Count - 1)
+            {
+                <span> / </span>
+            }
+        }
+    }
+</div>
 
 <div>
     @if (prefixPath.Any())
@@ -53,12 +83,12 @@
                         @if (item.IsFolder)
                         {
                             <a href="@Url.Action("Index", new { prefix = item.Name })">
-                                <i class="fa fa-folder"></i> @item.Name.TrimEnd('/')
+                                <img src="~/images/Folder.png" class="icon" /> @item.Name.TrimEnd('/')
                             </a>
                         }
                         else
                         {
-                            <i class="fa fa-file"></i> @item.Name
+                            <img src="~/images/file.png" class="icon" /> @item.Name
                         }
                     </td>
                     <td>@item.LastModified?.ToString()</td>
@@ -68,5 +98,3 @@
         </tbody>
     </table>
 </div>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dR3n2nEsdZZ+6neUXE5sMOPVBGZwA1fjHc9LpB90Yow9jXmyGkK7iVfhI/S2NV6Qx1cFZbLgFWc5hB7cdK+zPg==" crossorigin="anonymous" referrerpolicy="no-referrer" />

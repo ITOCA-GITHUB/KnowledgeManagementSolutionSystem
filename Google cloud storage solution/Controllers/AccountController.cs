@@ -113,6 +113,7 @@ namespace Google_cloud_storage_solution.Controllers
                     var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+                new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
                 new Claim(ClaimTypes.Role, user.Role ?? string.Empty)
             };
 

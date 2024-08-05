@@ -20,7 +20,7 @@ namespace Google_cloud_storage_solution.Databases
         public DbSet<UserActivity> UserActivities { get; set; }
         public DbSet<Menu> Menu { get; set; }
         public DbSet<MenuItem> MenuItem { get; set; }
-
+        public DbSet<RolePermissions> RolePermissions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -39,6 +39,10 @@ namespace Google_cloud_storage_solution.Databases
             modelBuilder.Entity<Menu>().HasKey(m => m.MenuId);
             modelBuilder.Entity<MenuItem>().HasKey(mi => mi.MenuItemId);
             modelBuilder.Entity<MenuItem>().HasOne(mi => mi.Menu).WithMany(m => m.MenuItems).HasForeignKey(mi => mi.MenuId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Users>()
+                 .HasMany(u => u.RolePermissions)
+                 .WithOne(rp => rp.User)
+                 .HasForeignKey(rp => rp.UserId);
         }
 
         public async Task<string?> GetEmailByUsernameAsync(string username)

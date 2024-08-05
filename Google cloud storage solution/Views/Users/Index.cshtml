@@ -17,6 +17,7 @@
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
+        background-color: white;
     }
 
         .table th, .table td {
@@ -78,6 +79,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Role)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Department)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -105,6 +109,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Department)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |

@@ -16,6 +16,10 @@ namespace Google_cloud_storage_solution.Models
 
         public string? Role { get; set; } = string.Empty;
 
+        public string? Department { get; set; } = string.Empty;
+
+        public ICollection<RolePermissions> RolePermissions { get; set; }  // Navigation property
+
         [NotMapped]
         public TimeSpan? LastLoginTime { get; set; }
         [NotMapped]
@@ -23,10 +27,10 @@ namespace Google_cloud_storage_solution.Models
 
         public Users()
         {
-
+            RolePermissions = new List<RolePermissions>();
         }
 
-        public Users(string _username, string _email, string _passwordHash, string _fullname, int _phoneNumber, string _physicalAddress, string _role)
+        public Users(string _username, string _email, string _passwordHash, string _fullname, int _phoneNumber, string _physicalAddress, string _role, string _department)
         {
             UserName = _username;
             Email = _email;
@@ -35,6 +39,8 @@ namespace Google_cloud_storage_solution.Models
             PhoneNumber = _phoneNumber;
             PhysicalAddress = _physicalAddress;
             Role = _role;
+            Department = _department;
+            RolePermissions = new List<RolePermissions>();
         }
     }
 }
