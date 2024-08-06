@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Upload File";
+}
+
+<h2>Upload File</h2>
+
+<form asp-controller="Storage" asp-action="UploadFile" enctype="multipart/form-data" method="post">
+    <div>
+        <label for="folderPath">Folder Path:</label>
+        <input type="text" name="folderPath" id="folderPath" required />
+    </div>
+    <div>
+        <label for="file">Select file:</label>
+        <input type="file" name="file" id="file" required />
+    </div>
+    <button type="submit">Upload</button>
+</form>

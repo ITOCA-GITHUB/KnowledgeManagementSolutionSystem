@@ -64,6 +64,33 @@ namespace Google_cloud_storage_solution.Services
 
             return objects;
         }
+
+        public string GenerateSignedUrl(string objectName, TimeSpan duration)
+        {
+            var urlSigner = UrlSigner.FromServiceAccountCredential(GoogleCredential.FromFile("GoogleStorageBucket.json").UnderlyingCredential as ServiceAccountCredential);
+            var signedUrl = urlSigner.Sign(
+                _bucketName,
+                objectName,
+                duration,
+                HttpMethod.Get
+            );
+
+            return signedUrl;
+        }
+
+        public async Task UploadObjectAsync(string bucketName, string objectName, Stream content)
+        {
+            using (var stream = content ?? new MemoryStream())
+            {
+                var storageObject = new StorageObject
+                {
+                    Name = objectName
+                };
+
+                await _storageClient.UploadObjectAsync(bucketName, objectName, null, stream);
+            }
+        }
+
     }
     public class StorageObject
     {

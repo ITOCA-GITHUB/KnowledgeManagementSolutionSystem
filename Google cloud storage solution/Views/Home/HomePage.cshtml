@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    int activityId = ViewBag.ActivityId;
 }
 
 <div class="text-center">
@@ -98,3 +99,13 @@
         </section>
     </main>
 </div>
+
+<script>
+    window.addEventListener('beforeunload', function (event) {
+        const exitTime = new Date().toISOString(); // Get the current time in ISO format
+        navigator.sendBeacon('/MenuItem/RecordExitTime', JSON.stringify({
+            activityId: @activityId,
+            exitTime: exitTime
+        }));
+    });
+</script>
