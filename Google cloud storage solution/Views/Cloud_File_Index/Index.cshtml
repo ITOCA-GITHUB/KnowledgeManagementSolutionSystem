@@ -6,9 +6,28 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<style>
+    .table {
+        background-color: white;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        .table tr:hover {
+            background-color: #f5f5f5;
+        }
+</style>
+
 <table class="table">
     <thead>
         <tr>
@@ -28,22 +47,22 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Folder)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatorEmail)
-            </td>
-
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Folder)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatorEmail)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

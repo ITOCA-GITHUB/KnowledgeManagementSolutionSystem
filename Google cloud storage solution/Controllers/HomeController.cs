@@ -89,7 +89,7 @@ namespace Google_cloud_storage_solution.Controllers
 
             if (user != null)
             {
-                // Calculate duration
+                // Retrieve current time and login time
                 var currentTime = DateTime.Now.TimeOfDay;
                 var loginTime = _dbContext.UserSessions
                     .Where(us => us.UserId == user.UserId && us.LogoutTime == null)
@@ -97,26 +97,31 @@ namespace Google_cloud_storage_solution.Controllers
                     .Select(us => us.LoginTime)
                     .FirstOrDefault();
 
-                var duration = currentTime - loginTime;
-
-                // Store logout time and duration
-                var userSession = _dbContext.UserSessions
-                    .Where(us => us.UserId == user.UserId && us.LogoutTime == null)
-                    .OrderByDescending(us => us.LoginTime)
-                    .FirstOrDefault();
-
-                if (userSession != null)
+                if (loginTime != default)
                 {
-                    userSession.LogoutTime = currentTime;
-                    userSession.Duration = new TimeSpan(duration.Hours, duration.Minutes, 0);
-                    _dbContext.SaveChanges();
+                    // Calculate duration ensuring it is positive
+                    var duration = currentTime > loginTime ? currentTime - loginTime : TimeSpan.Zero;
 
-                    // Export logout details to CSV and Excel
-                    ExportLogoutDetailsToCsv(user.UserName, userSession.LogoutTime.Value, userSession.Duration.Value);
-                    ExportLogoutDetailsToExcel(user.UserName, userSession.LogoutTime.Value, userSession.Duration.Value);
+                    // Store logout time and duration
+                    var userSession = _dbContext.UserSessions
+                        .Where(us => us.UserId == user.UserId && us.LogoutTime == null)
+                        .OrderByDescending(us => us.LoginTime)
+                        .FirstOrDefault();
+
+                    if (userSession != null)
+                    {
+                        userSession.LogoutTime = currentTime;
+                        userSession.Duration = new TimeSpan(duration.Hours, duration.Minutes, 0);
+                        _dbContext.SaveChanges();
+
+                        // Export logout details to CSV and Excel
+                        ExportLogoutDetailsToCsv(user.UserName, userSession.LogoutTime.Value, userSession.Duration.Value);
+                        ExportLogoutDetailsToExcel(user.UserName, userSession.LogoutTime.Value, userSession.Duration.Value);
+                    }
                 }
             }
 
+            // Add any additional logout logic or redirection here
             // Clear session data
             HttpContext.Session.Clear();
 

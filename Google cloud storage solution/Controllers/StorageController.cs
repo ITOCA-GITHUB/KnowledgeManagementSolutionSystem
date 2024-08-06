@@ -1,9 +1,13 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using CsvHelper;
+using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Google_cloud_storage_solution.Databases;
+using Google_cloud_storage_solution.Models;
 using Google_cloud_storage_solution.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using OfficeOpenXml;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,6 +16,7 @@ namespace Google_cloud_storage_solution.Controllers
 {
     public class StorageController : Controller
     {
+        public int ActivityId { get; set; }
         private readonly StorageClient _storageClient;
         private readonly GoogleCloudStorageService _cloudStorageService;
         private readonly GoogleStorageDbContext _dbContext;
@@ -28,6 +33,7 @@ namespace Google_cloud_storage_solution.Controllers
 
         public async Task<IActionResult> Index(string prefix = "")
         {
+            TimeTracking(nameof(Index));
             var bucketName = "kms_cloud_storage";
             var storageObjects = await _cloudStorageService.ListObjectsAsync(bucketName, prefix);
 
@@ -99,6 +105,13 @@ namespace Google_cloud_storage_solution.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult UploadFile()
+        {
+            return View();
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file, string folderPath)
         {
@@ -141,6 +154,68 @@ namespace Google_cloud_storage_solution.Controllers
                 HttpMethod.Get);
 
             return url;
+        }
+
+        private void TimeTracking(string pageName)
+        {
+            var userName = HttpContext.User.Identity.Name;
+            var currentTime = DateTime.Now;
+
+            var userActivity = new UserActivity
+            {
+                UserName = userName,
+                PageName = pageName,
+                EntryTime = currentTime.TimeOfDay,
+            };
+
+            _dbContext.UserActivities.Add(userActivity);
+            _dbContext.SaveChanges();
+
+
+            ExportActivityDetailsToCsv(userActivity);
+            ExportActivityDetailsToExcel(userActivity);
+
+            // Pass the activity ID to the view so it can be used for recording the exit time
+            ViewBag.ActivityId = userActivity.Id;
+        }
+
+        private void ExportActivityDetailsToCsv(UserActivity activity)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "login_details.csv");
+            var activityDetails = new
+            {
+                UserName = activity.UserName,
+                PageName = activity.PageName,
+                EntryTime = activity.EntryTime.ToString(@"hh\:mm\:ss"),
+                ExitTime = activity.ExitTime.ToString(@"hh\:mm\:ss")
+            };
+
+            using (var writer = new StreamWriter(filePath, append: true))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecord(activityDetails);
+                writer.WriteLine(); // Ensures each record is on a new line
+            }
+        }
+
+        private void ExportActivityDetailsToExcel(UserActivity activity)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "login_details.xlsx");
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                var worksheet = package.Workbook.Worksheets.FirstOrDefault() ?? package.Workbook.Worksheets.Add("ActivityDetails");
+                var rowCount = worksheet.Dimension?.Rows ?? 0;
+
+                worksheet.Cells[rowCount + 1, 1].Value = activity.UserName;
+                worksheet.Cells[rowCount + 1, 2].Value = activity.PageName;
+                worksheet.Cells[rowCount + 1, 3].Value = activity.EntryTime.ToString(@"hh\:mm\:ss");
+                worksheet.Cells[rowCount + 1, 4].Value = activity.ExitTime.ToString(@"hh\:mm\:ss");
+
+                package.Save();
+            }
         }
 
     }

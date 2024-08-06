@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Settings";
+    int activityId = ViewBag.ActivityId;
 }
 
 <h1>Settings</h1>
@@ -18,3 +19,13 @@
 <div>
     <a asp-action="Edit" class="btn btn-primary">Edit</a>
 </div>
+
+<script>
+    window.addEventListener('beforeunload', function (event) {
+        const exitTime = new Date().toISOString(); // Get the current time in ISO format
+        navigator.sendBeacon('/MenuItem/RecordExitTime', JSON.stringify({
+            activityId: @activityId,
+            exitTime: exitTime
+        }));
+    });
+</script>

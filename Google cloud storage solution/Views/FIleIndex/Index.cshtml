@@ -1,5 +1,11 @@
 ﻿@model IEnumerable<Google_cloud_storage_solution.Models.File_Index>
 
+@{
+    ViewData["Title"] = "File Index";
+    int? activityId = ViewBag.ActivityId as int?;
+}
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -121,3 +127,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+<script>
+    window.addEventListener('beforeunload', function (event) {
+        const exitTime = new Date().toISOString(); // Get the current time in ISO format
+        navigator.sendBeacon('/MenuItem/RecordExitTime', JSON.stringify({
+            activityId: @(activityId.HasValue ? activityId.Value.ToString() : "null"),
+            exitTime: exitTime
+        }));
+    });
+</script>
