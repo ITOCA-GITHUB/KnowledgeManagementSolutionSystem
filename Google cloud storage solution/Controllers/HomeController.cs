@@ -89,35 +89,28 @@ namespace Google_cloud_storage_solution.Controllers
 
             if (user != null)
             {
-                // Retrieve current time and login time
-                var currentTime = DateTime.Now.TimeOfDay;
-                var loginTime = _dbContext.UserSessions
+                // Calculate duration
+                var currentTime = DateTime.Now;
+                var userSession = _dbContext.UserSessions
                     .Where(us => us.UserId == user.UserId && us.LogoutTime == null)
                     .OrderByDescending(us => us.LoginTime)
-                    .Select(us => us.LoginTime)
                     .FirstOrDefault();
 
-                if (loginTime != default)
+                if (userSession != null)
                 {
-                    // Calculate duration ensuring it is positive
-                    var duration = currentTime > loginTime ? currentTime - loginTime : TimeSpan.Zero;
+                    var loginTime = userSession.LoginTime;
+                    var duration = currentTime - loginTime;
 
                     // Store logout time and duration
-                    var userSession = _dbContext.UserSessions
-                        .Where(us => us.UserId == user.UserId && us.LogoutTime == null)
-                        .OrderByDescending(us => us.LoginTime)
-                        .FirstOrDefault();
+                    userSession.LogoutTime = currentTime;
+                    userSession.Duration = duration;
+                    userSession.DurationHours = (int)duration.Hours;
+                    userSession.DurationMinutes = duration.Minutes;
+                    _dbContext.SaveChanges();
 
-                    if (userSession != null)
-                    {
-                        userSession.LogoutTime = currentTime;
-                        userSession.Duration = new TimeSpan(duration.Hours, duration.Minutes, 0);
-                        _dbContext.SaveChanges();
-
-                        // Export logout details to CSV and Excel
-                        ExportLogoutDetailsToCsv(user.UserName, userSession.LogoutTime.Value, userSession.Duration.Value);
-                        ExportLogoutDetailsToExcel(user.UserName, userSession.LogoutTime.Value, userSession.Duration.Value);
-                    }
+                    // Export logout details to CSV and Excel
+                    ExportLogoutDetailsToCsv(user.UserName, userSession.LogoutTime.Value.TimeOfDay, userSession.Duration.Value);
+                    ExportLogoutDetailsToExcel(user.UserName, userSession.LogoutTime.Value.TimeOfDay, userSession.Duration.Value);
                 }
             }
 

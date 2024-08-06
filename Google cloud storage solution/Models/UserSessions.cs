@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public TimeSpan LoginTime { get; set; }
-        public TimeSpan? LogoutTime { get; set; }
+        public DateTime LoginTime { get; set; }
+        public DateTime? LogoutTime { get; set; }
         public TimeSpan? Duration { get; set; }
         public int? DurationHours { get; set; }
         public int? DurationMinutes { get; set; }

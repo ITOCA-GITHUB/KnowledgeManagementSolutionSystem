@@ -135,15 +135,15 @@ namespace Google_cloud_storage_solution.Controllers
                     var userSession = new UserSessions
                     {
                         UserId = user.UserId,
-                        LoginTime = currentTime.TimeOfDay,
+                        LoginTime = DateTime.Now,
                         IsIdle = false
                     };
 
                     _dbContext.UserSessions.Add(userSession);
                     _dbContext.SaveChanges();
 
-                    ExportLoginDetailsToCsv(user.UserName, userSession.LoginTime);
-                    ExportLoginDetailsToExcel(user.UserName, userSession.LoginTime);
+                    ExportLoginDetailsToCsv(user.UserName, userSession.LoginTime.TimeOfDay);
+                    ExportLoginDetailsToExcel(user.UserName, userSession.LoginTime.TimeOfDay);
 
                     return RedirectToAction("HomePage", "Home");
                 }
@@ -170,16 +170,7 @@ namespace Google_cloud_storage_solution.Controllers
             if (user != null)
             {
                 // Calculate duration
-                var currentTime = DateTime.Now.TimeOfDay;
-                var loginTime = _dbContext.UserSessions
-                    .Where(us => us.UserId == user.UserId && us.LogoutTime == null)
-                    .OrderByDescending(us => us.LoginTime)
-                    .Select(us => us.LoginTime)
-                    .FirstOrDefault();
-
-                var duration = currentTime - loginTime;
-
-                // Store logout time and duration
+                var currentTime = DateTime.Now;
                 var userSession = _dbContext.UserSessions
                     .Where(us => us.UserId == user.UserId && us.LogoutTime == null)
                     .OrderByDescending(us => us.LoginTime)
@@ -187,10 +178,15 @@ namespace Google_cloud_storage_solution.Controllers
 
                 if (userSession != null)
                 {
-                    userSession.LogoutTime = currentTime;
-                    userSession.Duration = new TimeSpan(duration.Hours, duration.Minutes, 0);
-                    _dbContext.SaveChanges();
+                    var loginTime = userSession.LoginTime;
+                    var duration = currentTime - loginTime;
 
+                    // Store logout time and duration
+                    userSession.LogoutTime = currentTime;
+                    userSession.Duration = duration;
+                    userSession.DurationHours = duration.Hours;
+                    userSession.DurationMinutes = duration.Minutes;
+                    _dbContext.SaveChanges();
                     // Export logout details to CSV and Excel
                 }
             }
@@ -272,6 +268,7 @@ namespace Google_cloud_storage_solution.Controllers
             var loginDetails = new
             {
                 UserName = userName,
+                Pagename = "Login",
                 LoginTime = loginTime.ToString(@"hh\:mm\:ss")
             };
 
@@ -294,7 +291,8 @@ namespace Google_cloud_storage_solution.Controllers
                 var worksheet = package.Workbook.Worksheets.FirstOrDefault() ?? package.Workbook.Worksheets.Add("LoginDetails");
                 var rowCount = worksheet.Dimension?.Rows ?? 0;
                 worksheet.Cells[rowCount + 1, 1].Value = userName;
-                worksheet.Cells[rowCount + 1, 2].Value = loginTime.ToString(@"hh\:mm\:ss");
+                worksheet.Cells[rowCount + 1, 2].Value = "Login";
+                worksheet.Cells[rowCount + 1, 3].Value = loginTime.ToString(@"hh\:mm\:ss");
 
                 package.Save();
             }

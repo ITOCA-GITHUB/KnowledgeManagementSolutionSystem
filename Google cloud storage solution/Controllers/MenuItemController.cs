@@ -264,7 +264,6 @@ namespace Google_cloud_storage_solution.Controllers
             var currenttime = DateTime.Now;
             var activities = await _dbContext.UserActivities.ToListAsync();
             var menuItems = await _dbContext.MenuItem.ToListAsync();
-            var currentDate = DateTime.Now;
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -273,14 +272,13 @@ namespace Google_cloud_storage_solution.Controllers
                 var worksheet = package.Workbook.Worksheets.Add("Timesheet");
                 var currentRow = 1;
 
-                worksheet.Cells[currentRow, 1].Value = "Week Number";
+                worksheet.Cells[currentRow, 1].Value = "Day of the Week";
                 worksheet.Cells[currentRow, 2].Value = "Name of the Project";
                 worksheet.Cells[currentRow, 3].Value = "Deliverable";
-                worksheet.Cells[currentRow, 4].Value = "Description of Activity";
-                worksheet.Cells[currentRow, 5].Value = "Output";
-                worksheet.Cells[currentRow, 6].Value = "Start Time";
-                worksheet.Cells[currentRow, 7].Value = "End Time";
-                worksheet.Cells[currentRow, 8].Value = "Duration";
+                worksheet.Cells[currentRow, 4].Value = "Output";
+                worksheet.Cells[currentRow, 5].Value = "Start Time";
+                worksheet.Cells[currentRow, 6].Value = "End Time";
+                worksheet.Cells[currentRow, 7].Value = "Duration";
 
                 foreach (var activity in activities)
                 {
@@ -288,19 +286,18 @@ namespace Google_cloud_storage_solution.Controllers
                     if (menuItem != null)
                     {
                         currentRow++;
-                        var weekNumber = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(currentDate, CalendarWeekRule.FirstDay, DayOfWeek.Monday); ;
+                        var activityDate = new DateTime(currenttime.Year, currenttime.Month, currenttime.Day).ToString("dd/MM");
                         var startTime = activity.EntryTime.ToString(@"hh\:mm\:ss");
                         var endTime = activity.ExitTime.ToString(@"hh\:mm\:ss");
                         var duration = (activity.ExitTime - activity.EntryTime).ToString(@"hh\:mm\:ss");
 
-                        worksheet.Cells[currentRow, 1].Value = weekNumber;
+                        worksheet.Cells[currentRow, 1].Value = activityDate;
                         worksheet.Cells[currentRow, 2].Value = menuItem.Title;
                         worksheet.Cells[currentRow, 3].Value = menuItem.ActionItems;
-                        worksheet.Cells[currentRow, 4].Value = string.Empty;
-                        worksheet.Cells[currentRow, 5].Value = menuItem.Status;
-                        worksheet.Cells[currentRow, 6].Value = startTime;
-                        worksheet.Cells[currentRow, 7].Value = endTime;
-                        worksheet.Cells[currentRow, 8].Value = duration;
+                        worksheet.Cells[currentRow, 4].Value = menuItem.Status;
+                        worksheet.Cells[currentRow, 5].Value = startTime;
+                        worksheet.Cells[currentRow, 6].Value = endTime;
+                        worksheet.Cells[currentRow, 7].Value = duration;
                     }
                 }
 

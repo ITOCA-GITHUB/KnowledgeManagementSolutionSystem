@@ -7,6 +7,7 @@
         public string? PageName { get; set; }
         public TimeSpan EntryTime { get; set; }
         public TimeSpan ExitTime { get; set; }
+        public DateTime? ActivityDate { get; set; }
 
         public UserActivity()
         {
