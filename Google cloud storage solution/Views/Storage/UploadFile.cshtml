@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Upload File";
+    var folders = ViewBag.Folders as List<string> ?? new List<string>();
 }
 
 <h2>Upload File</h2>
@@ -7,7 +8,13 @@
 <form asp-controller="Storage" asp-action="UploadFile" enctype="multipart/form-data" method="post">
     <div>
         <label for="folderPath">Folder Path:</label>
-        <input type="text" name="folderPath" id="folderPath" required />
+        <select name="folderPath" id="folderPath" required>
+            <option value="">Select a folder</option>
+            @foreach (var folder in folders)
+            {
+                <option value="@folder">@folder</option>
+            }
+        </select>
     </div>
     <div>
         <label for="file">Select file:</label>

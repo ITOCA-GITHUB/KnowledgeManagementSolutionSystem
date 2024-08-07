@@ -51,6 +51,7 @@ namespace Google_cloud_storage_solution.Controllers
                 UserName = userName,
                 PageName = menuItem.Title,
                 EntryTime = currentTime.TimeOfDay,
+                ActivityDate = DateTime.Today.Date,
             };
 
             _dbContext.UserActivities.Add(userActivity);
@@ -275,10 +276,12 @@ namespace Google_cloud_storage_solution.Controllers
                 worksheet.Cells[currentRow, 1].Value = "Day of the Week";
                 worksheet.Cells[currentRow, 2].Value = "Name of the Project";
                 worksheet.Cells[currentRow, 3].Value = "Deliverable";
-                worksheet.Cells[currentRow, 4].Value = "Output";
-                worksheet.Cells[currentRow, 5].Value = "Start Time";
-                worksheet.Cells[currentRow, 6].Value = "End Time";
-                worksheet.Cells[currentRow, 7].Value = "Duration";
+                worksheet.Cells[currentRow, 4].Value = "Description of Activity";
+                worksheet.Cells[currentRow, 5].Value = "Output";
+                worksheet.Cells[currentRow, 6].Value = "Start Time";
+                worksheet.Cells[currentRow, 7].Value = "End Time";
+                worksheet.Cells[currentRow, 8].Value = "Duration";
+                worksheet.Cells[currentRow, 9].Value = "Username";
 
                 foreach (var activity in activities)
                 {
@@ -286,18 +289,57 @@ namespace Google_cloud_storage_solution.Controllers
                     if (menuItem != null)
                     {
                         currentRow++;
-                        var activityDate = new DateTime(currenttime.Year, currenttime.Month, currenttime.Day).ToString("dd/MM");
+                        var activityDate = activity.ActivityDate.HasValue
+                   ? activity.ActivityDate.Value.ToString("dd-MMM")
+                   : "N/A";
                         var startTime = activity.EntryTime.ToString(@"hh\:mm\:ss");
                         var endTime = activity.ExitTime.ToString(@"hh\:mm\:ss");
                         var duration = (activity.ExitTime - activity.EntryTime).ToString(@"hh\:mm\:ss");
+                        var username = activity.UserName;
 
                         worksheet.Cells[currentRow, 1].Value = activityDate;
                         worksheet.Cells[currentRow, 2].Value = menuItem.Title;
-                        worksheet.Cells[currentRow, 3].Value = menuItem.ActionItems;
-                        worksheet.Cells[currentRow, 4].Value = menuItem.Status;
-                        worksheet.Cells[currentRow, 5].Value = startTime;
-                        worksheet.Cells[currentRow, 6].Value = endTime;
-                        worksheet.Cells[currentRow, 7].Value = duration;
+                        worksheet.Cells[currentRow, 3].Value = "deliverable";
+                        worksheet.Cells[currentRow, 4].Value = menuItem.ActionItems;
+                        worksheet.Cells[currentRow, 5].Value = menuItem.Status;
+                        worksheet.Cells[currentRow, 6].Value = startTime;
+                        worksheet.Cells[currentRow, 7].Value = endTime;
+                        worksheet.Cells[currentRow, 8].Value = duration;
+                        worksheet.Cells[currentRow, 9].Value = username;
+                    }
+                }
+
+                var summaryWorksheet = package.Workbook.Worksheets.Add("Weekly Summary");
+                var summaryRow = 1;
+
+                summaryWorksheet.Cells[summaryRow, 1].Value = "Username";
+                summaryWorksheet.Cells[summaryRow, 2].Value = "Name of the Project";
+                summaryWorksheet.Cells[summaryRow, 3].Value = "Total Time Spent";
+
+                // Group activities by user and project
+                var groupedActivities = activities
+                    .GroupBy(a => new { a.UserName, a.PageName })
+                    .Select(g => new
+                    {
+                        g.Key.UserName,
+                        g.Key.PageName,
+                        TotalDuration = g.Sum(a => (a.ExitTime - a.EntryTime).TotalSeconds)
+                    })
+                    .ToList();
+
+                // Format and display data in summary sheet
+                foreach (var group in groupedActivities)
+                {
+                    summaryRow++;
+                    var menuItem = menuItems.FirstOrDefault(m => m.Title == group.PageName);
+
+                    if (menuItem != null)
+                    {
+                        var totalDuration = TimeSpan.FromSeconds(group.TotalDuration).ToString(@"hh\:mm");
+
+                        summaryWorksheet.Cells[summaryRow, 1].Value = group.UserName;
+                        summaryWorksheet.Cells[summaryRow, 2].Value = menuItem.Title;
+                        summaryWorksheet.Cells[summaryRow, 3].Value = totalDuration;
                     }
                 }
 

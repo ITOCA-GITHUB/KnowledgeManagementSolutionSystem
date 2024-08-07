@@ -106,8 +106,18 @@ namespace Google_cloud_storage_solution.Controllers
         }
 
         [HttpGet]
-        public IActionResult UploadFile()
+        public async Task<IActionResult> UploadFile()
         {
+            // Retrieve the current user's email
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User email is required.");
+            }
+
+            var folders = await GetFoldersAsync(userEmail);
+            ViewBag.Folders = folders;
             return View();
         }
 
@@ -217,6 +227,41 @@ namespace Google_cloud_storage_solution.Controllers
                 package.Save();
             }
         }
+        private async Task<List<string>> GetFoldersAsync(string userEmail)
+        {
+            var folders = new List<string>();
 
+            // Fetch all objects in the bucket
+            var objects = _storageClient.ListObjects(_bucketName, "");
+
+            // Normalize the user email for comparison
+            var normalizedEmail = userEmail.Trim().ToLower();
+            Console.WriteLine($"Normalized User Email: {normalizedEmail}"); // Debugging print
+
+            foreach (var obj in objects)
+            {
+                // Ensure that the object is part of a folder and not a file
+                var parts = obj.Name.Split('/');
+                Console.WriteLine($"Object Name: {obj.Name}"); // Debugging print
+
+                if (parts.Length > 1)
+                {
+                    // Extract the folder name
+                    var folder = string.Join("/", parts.Take(parts.Length - 1));
+                    Console.WriteLine($"Extracted Folder: {folder}"); // Debugging print
+
+                    // Check if the folder matches the user's email
+                    if (parts.Length > 2 && parts[1].Trim().ToLower() == normalizedEmail)
+                    {
+                        // Add the folder to the list if not already included
+                        if (!folders.Contains(folder))
+                        {
+                            folders.Add(folder);
+                        }
+                    }
+                }
+            }
+            return folders;
+        }
     }
 }
