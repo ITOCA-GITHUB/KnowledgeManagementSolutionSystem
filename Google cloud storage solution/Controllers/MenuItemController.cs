@@ -262,7 +262,6 @@ namespace Google_cloud_storage_solution.Controllers
         [HttpPost]
         public async Task<IActionResult> ExportTimesheetToXlsx()
         {
-            var currenttime = DateTime.Now;
             var activities = await _dbContext.UserActivities.ToListAsync();
             var menuItems = await _dbContext.MenuItem.ToListAsync();
 
@@ -273,6 +272,7 @@ namespace Google_cloud_storage_solution.Controllers
                 var worksheet = package.Workbook.Worksheets.Add("Timesheet");
                 var currentRow = 1;
 
+                // Define headers
                 worksheet.Cells[currentRow, 1].Value = "Day of the Week";
                 worksheet.Cells[currentRow, 2].Value = "Name of the Project";
                 worksheet.Cells[currentRow, 3].Value = "Deliverable";
@@ -290,11 +290,12 @@ namespace Google_cloud_storage_solution.Controllers
                     {
                         currentRow++;
                         var activityDate = activity.ActivityDate.HasValue
-                   ? activity.ActivityDate.Value.ToString("dd-MMM")
-                   : "N/A";
-                        var startTime = activity.EntryTime.ToString(@"hh\:mm\:ss");
-                        var endTime = activity.ExitTime.ToString(@"hh\:mm\:ss");
-                        var duration = (activity.ExitTime - activity.EntryTime).ToString(@"hh\:mm\:ss");
+                            ? activity.ActivityDate.Value.ToString("dd-MMM")
+                            : "N/A";
+                        var startTime = activity.EntryTime.ToString(@"hh\:mm");
+                        var endTime = activity.ExitTime.ToString(@"hh\:mm");
+                        var durationInSeconds = (activity.ExitTime - activity.EntryTime).TotalSeconds; // Duration in seconds
+                        var duration = TimeSpan.FromSeconds(durationInSeconds).ToString(@"hh\:mm");
                         var username = activity.UserName;
 
                         worksheet.Cells[currentRow, 1].Value = activityDate;
@@ -309,25 +310,28 @@ namespace Google_cloud_storage_solution.Controllers
                     }
                 }
 
-                var summaryWorksheet = package.Workbook.Worksheets.Add("Weekly Summary");
+                var summaryWorksheet = package.Workbook.Worksheets.Add("New Weekly Summary");
                 var summaryRow = 1;
 
+                // Define headers for summary
                 summaryWorksheet.Cells[summaryRow, 1].Value = "Username";
                 summaryWorksheet.Cells[summaryRow, 2].Value = "Name of the Project";
                 summaryWorksheet.Cells[summaryRow, 3].Value = "Total Time Spent";
 
-                // Group activities by user and project
+                // Initialize overall total duration
+                TimeSpan overallTotalDuration = TimeSpan.Zero;
+
+                // Group activities by username and project name
                 var groupedActivities = activities
                     .GroupBy(a => new { a.UserName, a.PageName })
                     .Select(g => new
                     {
                         g.Key.UserName,
                         g.Key.PageName,
-                        TotalDuration = g.Sum(a => (a.ExitTime - a.EntryTime).TotalSeconds)
+                        TotalDurations = g.Select(a => TimeSpan.FromSeconds((a.ExitTime - a.EntryTime).TotalSeconds))
                     })
                     .ToList();
 
-                // Format and display data in summary sheet
                 foreach (var group in groupedActivities)
                 {
                     summaryRow++;
@@ -335,14 +339,38 @@ namespace Google_cloud_storage_solution.Controllers
 
                     if (menuItem != null)
                     {
-                        var totalDuration = TimeSpan.FromSeconds(group.TotalDuration).ToString(@"hh\:mm");
+                        // Sum up all durations in the group
+                        TimeSpan totalDuration = TimeSpan.Zero;
+                        foreach (var duration in group.TotalDurations)
+                        {
+                            totalDuration += duration;
+                        }
 
-                        summaryWorksheet.Cells[summaryRow, 1].Value = group.UserName;
+                        // Add this group's total duration to the overall total duration
+                        overallTotalDuration += totalDuration;
+
+                        // Convert total duration to hh:mm:ss format
+                        var totalDurationFormatted = totalDuration.ToString(@"hh\:mm");
+
+                        summaryWorksheet.Cells[summaryRow, 1].Value = group.UserName ?? string.Empty;
                         summaryWorksheet.Cells[summaryRow, 2].Value = menuItem.Title;
-                        summaryWorksheet.Cells[summaryRow, 3].Value = totalDuration;
+                        summaryWorksheet.Cells[summaryRow, 3].Value = totalDurationFormatted;
+
+                        // Log for debugging purposes
+                        Console.WriteLine($"{group.PageName}: {totalDurationFormatted}");
                     }
                 }
 
+                // Add a row for the overall total time spent
+                summaryRow++;
+                summaryWorksheet.Cells[summaryRow, 1].Value = "Overall Total";
+                summaryWorksheet.Cells[summaryRow, 2].Value = "";
+                summaryWorksheet.Cells[summaryRow, 3].Value = overallTotalDuration.ToString(@"hh\:mm");
+
+                // Log the overall total duration
+                Console.WriteLine($"Overall Total Time Spent: {overallTotalDuration.ToString(@"hh\:mm")}");
+
+                // Save the file
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "timesheet.xlsx");
                 using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                 {
@@ -352,5 +380,8 @@ namespace Google_cloud_storage_solution.Controllers
                 return Ok("Excel timesheet file saved successfully.");
             }
         }
+
+
+
     }
 }
