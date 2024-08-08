@@ -1,5 +1,4 @@
-﻿using CsvHelper;
-using Google_cloud_storage_solution.Databases;
+﻿using Google_cloud_storage_solution.Databases;
 using Google_cloud_storage_solution.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,7 +11,7 @@ namespace Google_cloud_storage_solution.Controllers
 {
     public class UserActivityExitModel
     {
-        public int ActivityId { get; set; }
+        public int? ActivityId { get; set; }
         public string? ExitTime { get; set; }
     }
     public class MenuItemController : Controller
@@ -57,7 +56,6 @@ namespace Google_cloud_storage_solution.Controllers
             _dbContext.UserActivities.Add(userActivity);
             await _dbContext.SaveChangesAsync();
 
-            ExportActivityDetailsToCsv(userActivity);
             ExportActivityDetailsToExcel(userActivity);
 
             // Pass the activity ID to the view so it can be used for recording the exit time
@@ -166,7 +164,6 @@ namespace Google_cloud_storage_solution.Controllers
                     _dbContext.SaveChanges();
 
                     // Export entry and exit times to CSV and Excel
-                    ExportActivityDetailsToCsv(activity);
                     ExportActivityDetailsToExcel(activity);
 
                     return Ok("Exit time recorded successfully.");
@@ -175,24 +172,6 @@ namespace Google_cloud_storage_solution.Controllers
                 {
                     return BadRequest("Invalid exit time format.");
                 }
-            }
-        }
-        private void ExportActivityDetailsToCsv(UserActivity activity)
-        {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "login_details.csv");
-            var activityDetails = new
-            {
-                UserName = activity.UserName,
-                PageName = activity.PageName,
-                EntryTime = activity.EntryTime.ToString(@"hh\:mm\:ss"),
-                ExitTime = activity.ExitTime.ToString(@"hh\:mm\:ss")
-            };
-
-            using (var writer = new StreamWriter(filePath, append: true))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecord(activityDetails);
-                writer.WriteLine(); // Ensures each record is on a new line
             }
         }
 

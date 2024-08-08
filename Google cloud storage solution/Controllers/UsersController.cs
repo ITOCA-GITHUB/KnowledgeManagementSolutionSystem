@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Drive.v3.Data;
 using Google_cloud_storage_solution.Databases;
 using Google_cloud_storage_solution.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,12 @@ namespace Google_cloud_storage_solution.Controllers
     public class UsersController : Controller
     {
         private readonly GoogleStorageDbContext _dbContext;
+
         public UsersController(GoogleStorageDbContext dbContext)
         {
-            _dbContext = dbContext;  
+            _dbContext = dbContext;
         }
+
         public IActionResult Index()
         {
             var users = _dbContext.Users.ToList();
@@ -64,6 +67,21 @@ namespace Google_cloud_storage_solution.Controllers
             if (id != user.UserId)
             {
                 return NotFound();
+            }
+
+            // Check if the current user is an admin
+            if (!User.IsInRole("Admin"))
+            {
+                // Prevent non-admin users from changing the role
+                var existingUser = _dbContext.Users.AsNoTracking().FirstOrDefault(u => u.UserId == id);
+                if (existingUser != null)
+                {
+                    user.Role = existingUser.Role;
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
 
             if (ModelState.IsValid)

@@ -49,6 +49,10 @@ namespace Google_cloud_storage_solution.Controllers
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
         }
+        private bool IsAdmin()
+        {
+            return User.IsInRole("Admin"); // Assuming "Admin" is the role name for admin users
+        }
 
         private bool IsUsernameTaken(string username)
         {
@@ -142,7 +146,6 @@ namespace Google_cloud_storage_solution.Controllers
                     _dbContext.UserSessions.Add(userSession);
                     _dbContext.SaveChanges();
 
-                    ExportLoginDetailsToCsv(user.UserName, userSession.LoginTime.TimeOfDay);
                     ExportLoginDetailsToExcel(user.UserName, userSession.LoginTime.TimeOfDay);
 
                     return RedirectToAction("HomePage", "Home");
@@ -262,23 +265,6 @@ namespace Google_cloud_storage_solution.Controllers
             return View();
         }
 
-        private void ExportLoginDetailsToCsv(string userName, TimeSpan loginTime)
-        {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "login_details.csv");
-            var loginDetails = new
-            {
-                UserName = userName,
-                Pagename = "Login",
-                LoginTime = loginTime.ToString(@"hh\:mm\:ss")
-            };
-
-            using (var writer = new StreamWriter(filePath, append: true))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecord(loginDetails);
-                writer.WriteLine(); // Ensures each record is on a new line
-            }
-        }
 
         private void ExportLoginDetailsToExcel(string userName, TimeSpan loginTime)
         {

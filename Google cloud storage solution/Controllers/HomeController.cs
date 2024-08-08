@@ -109,7 +109,6 @@ namespace Google_cloud_storage_solution.Controllers
                     _dbContext.SaveChanges();
 
                     // Export logout details to CSV and Excel
-                    ExportLogoutDetailsToCsv(user.UserName, userSession.LogoutTime.Value.TimeOfDay, userSession.Duration.Value);
                     ExportLogoutDetailsToExcel(user.UserName, userSession.LogoutTime.Value.TimeOfDay, userSession.Duration.Value);
                 }
             }
@@ -128,23 +127,6 @@ namespace Google_cloud_storage_solution.Controllers
             return RedirectToAction("LogOut", "Account");
         }
 
-        private void ExportLogoutDetailsToCsv(string userName, TimeSpan logoutTime, TimeSpan duration)
-        {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "logout_details.csv");
-            var logoutDetails = new
-            {
-                UserName = userName,
-                LogoutTime = logoutTime.ToString(@"hh\:mm\:ss"),
-                Duration = duration.ToString(@"hh\:mm")
-            };
-
-            using (var writer = new StreamWriter(filePath, append: true))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecord(logoutDetails);
-                writer.WriteLine(); // Ensures each record is on a new line
-            }
-        }
 
         private void ExportLogoutDetailsToExcel(string userName, TimeSpan logoutTime, TimeSpan duration)
         {
@@ -167,25 +149,6 @@ namespace Google_cloud_storage_solution.Controllers
         public IActionResult LoggedOut()
         {
             return View();
-        }
-
-        private void ExportActivityDetailsToCsv(UserActivity activity)
-        {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "login_details.csv");
-            var activityDetails = new
-            {
-                UserName = activity.UserName,
-                PageName = activity.PageName,
-                EntryTime = activity.EntryTime.ToString(@"hh\:mm\:ss"),
-                ExitTime = activity.ExitTime.ToString(@"hh\:mm\:ss")
-            };
-
-            using (var writer = new StreamWriter(filePath, append: true))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecord(activityDetails);
-                writer.WriteLine(); // Ensures each record is on a new line
-            }
         }
 
         private void ExportActivityDetailsToExcel(UserActivity activity)
@@ -222,8 +185,6 @@ namespace Google_cloud_storage_solution.Controllers
             _dbContext.UserActivities.Add(userActivity);
             _dbContext.SaveChanges();
 
-
-            ExportActivityDetailsToCsv(userActivity);
             ExportActivityDetailsToExcel(userActivity);
 
             // Pass the activity ID to the view so it can be used for recording the exit time
