@@ -163,7 +163,7 @@ namespace Google_cloud_storage_solution.Controllers
 
                     _dbContext.SaveChanges();
 
-                    // Export entry and exit times to CSV and Excel
+                    // Export entry and exit times to Excel
                     ExportActivityDetailsToExcel(activity);
 
                     return Ok("Exit time recorded successfully.");
@@ -271,10 +271,10 @@ namespace Google_cloud_storage_solution.Controllers
                         var activityDate = activity.ActivityDate.HasValue
                             ? activity.ActivityDate.Value.ToString("dd-MMM")
                             : "N/A";
-                        var startTime = activity.EntryTime.ToString(@"hh\:mm");
-                        var endTime = activity.ExitTime.ToString(@"hh\:mm");
+                        var startTime = activity.EntryTime.ToString(@"hh\:mm\:ss");
+                        var endTime = activity.ExitTime.ToString(@"hh\:mm\:ss");
                         var durationInSeconds = (activity.ExitTime - activity.EntryTime).TotalSeconds; // Duration in seconds
-                        var duration = TimeSpan.FromSeconds(durationInSeconds).ToString(@"hh\:mm");
+                        var duration = TimeSpan.FromSeconds(durationInSeconds).ToString(@"hh\:mm\:ss");
                         var username = activity.UserName;
 
                         worksheet.Cells[currentRow, 1].Value = activityDate;
@@ -289,7 +289,7 @@ namespace Google_cloud_storage_solution.Controllers
                     }
                 }
 
-                var summaryWorksheet = package.Workbook.Worksheets.Add("New Weekly Summary");
+                var summaryWorksheet = package.Workbook.Worksheets.Add("Weekly Summary");
                 var summaryRow = 1;
 
                 // Define headers for summary
@@ -329,7 +329,7 @@ namespace Google_cloud_storage_solution.Controllers
                         overallTotalDuration += totalDuration;
 
                         // Convert total duration to hh:mm:ss format
-                        var totalDurationFormatted = totalDuration.ToString(@"hh\:mm");
+                        var totalDurationFormatted = totalDuration.ToString(@"hh\:mm\:ss");
 
                         summaryWorksheet.Cells[summaryRow, 1].Value = group.UserName ?? string.Empty;
                         summaryWorksheet.Cells[summaryRow, 2].Value = menuItem.Title;
@@ -344,10 +344,10 @@ namespace Google_cloud_storage_solution.Controllers
                 summaryRow++;
                 summaryWorksheet.Cells[summaryRow, 1].Value = "Overall Total";
                 summaryWorksheet.Cells[summaryRow, 2].Value = "";
-                summaryWorksheet.Cells[summaryRow, 3].Value = overallTotalDuration.ToString(@"hh\:mm");
+                summaryWorksheet.Cells[summaryRow, 3].Value = overallTotalDuration.ToString(@"hh\:mm\:ss");
 
                 // Log the overall total duration
-                Console.WriteLine($"Overall Total Time Spent: {overallTotalDuration.ToString(@"hh\:mm")}");
+                Console.WriteLine($"Overall Total Time Spent: {overallTotalDuration.ToString(@"hh\:mm\:ss")}");
 
                 // Save the file
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "timesheet.xlsx");
@@ -359,8 +359,5 @@ namespace Google_cloud_storage_solution.Controllers
                 return Ok("Excel timesheet file saved successfully.");
             }
         }
-
-
-
     }
 }

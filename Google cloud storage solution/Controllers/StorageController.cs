@@ -39,6 +39,14 @@ namespace Google_cloud_storage_solution.Controllers
 
             // Retrieve the current user's email
             var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User email is required.");
+            }
+
+            var folders = await GetFoldersAsync(userEmail);
+            ViewBag.Folders = folders;
+
 
             if (!string.IsNullOrEmpty(userEmail))
             {

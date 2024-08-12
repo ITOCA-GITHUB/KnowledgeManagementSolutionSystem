@@ -16,6 +16,7 @@ namespace Google_cloud_storage_solution.Controllers
             _dbContext = dbContext;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var users = _dbContext.Users.ToList();
@@ -32,11 +33,13 @@ namespace Google_cloud_storage_solution.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Users user)
@@ -93,6 +96,7 @@ namespace Google_cloud_storage_solution.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.UserId == id);
@@ -103,6 +107,7 @@ namespace Google_cloud_storage_solution.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
