@@ -4,21 +4,9 @@
     ViewData["Title"] = "Login";
 }
 
+
+
 <style>
-
-
-    /*      body {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: "Poppins", sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                background-size: cover;
-                background-position: center;
-            } */
 
     .container2 {
         justify-content: center;
@@ -29,8 +17,8 @@
 
     .wrapper {
         width: 420px;
-        background: black;
-        border: 5px solid dodgerblue;
+        background: #f0ad4e;
+        border: 5px solid black;
         backdrop-filter: blur(4px);
         color: #fff;
         border-radius: 12px;
@@ -116,7 +104,10 @@
         margin: 20px 0 15px;
     }
 </style>
-<div class="container2">
+
+<br />
+
+<div class="container2" style="height:stretch">
     <div class="wrapper" id="loginFormContent">
 
         <form asp-action="Login" method="post">
@@ -150,6 +141,8 @@
                 <label><a asp-action="ForgotPassword" asp-controller="Account">Forgot Password</a></label>
             </div>
             <button type="submit" class="btn">Login</button>
+            <br />
+            <br />
             <p>Don't have an account? <a asp-action="Register" asp-controller="Account">Register</a></p>
 
         </form>

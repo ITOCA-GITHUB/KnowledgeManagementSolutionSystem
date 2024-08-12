@@ -22,7 +22,6 @@ body {
     padding: 0;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
-    background: url('../Images/Learning Background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -30,8 +29,6 @@ body {
 
 .container {
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .user-profile {
@@ -77,3 +74,19 @@ body {
             .user-profile .dropdown-menu a:hover {
                 background-color: #f1f1f1;
             }
+
+.footer {
+    height: 150px;
+}
+
+
+.footer {
+    background-color: black;
+}
+
+.socials a {
+    padding: 10px;
+    background-color: white;
+    margin: 10px;
+    border-radius: 50%;
+}

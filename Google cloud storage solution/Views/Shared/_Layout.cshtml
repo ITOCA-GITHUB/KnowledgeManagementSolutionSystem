@@ -15,7 +15,7 @@
 <style>
     /* Navbar styles */
     .navbar {
-        background-color: dodgerblue !important;
+        background-color: #f0ad4e;
     }
 
     .navbar-nav .nav-link {
@@ -118,7 +118,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark background-color: #f0ad4e border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ITOCA Knowledge Management System</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -266,10 +266,27 @@
             @RenderBody()
         </main>
     </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Google_cloud_storage_solution - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer bg-primary">
+
+        <div class="footer">
+            <div class="socials">
+                <center>
+                    <br />
+                    <a href=""><i class="bi bi-facebook"></i></a>
+                    <a href=""><i class="bi bi-linkedin"></i></a>
+                    <a href=""><i class="bi bi-twitter-x"></i></a>
+                    <a href=""><i class="bi bi-instagram"></i></a>
+                    <a href=""><i class="bi bi-browser-edge"></i></a>
+                </center>
+
+                <br />
+            </div>
+            <div class="text-center">
+                <i class="bi bi-book">&nbsp</i>ITOCA Knowledge Management System<br />
+                Promoting and building capacity on the use of electronic resources and digital tools in Africa
+            </div>
         </div>
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
