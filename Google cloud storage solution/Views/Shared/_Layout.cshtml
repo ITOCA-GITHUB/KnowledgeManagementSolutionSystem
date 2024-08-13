@@ -222,8 +222,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Storage" asp-action="Index">Storage </a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="StorageDropdown" role="button">
+                                        Storage
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="StorageDropdown">
+                                        <a class="dropdown-item" asp-controller="Storage" asp-action="Index">Storage View</a>
+                                        <a class="dropdown-item" asp-controller="Storage" asp-action="UploadFile">Upload File</a>
+                                    </div>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="FileIndex" asp-action="Index">File Index</a>
@@ -237,8 +243,7 @@
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="googleCloudDropdown">
                                         <a class="dropdown-item" asp-controller="FileUpload" asp-action="UploadToGoogleCLoud">Upload to Google Cloud</a>
-                                        <a class="dropdown-item" asp-controller="FileUpload" asp-action="UpdatePermissions">Update Permissions</a>
-                                        <a class="dropdown-item" asp-area="" asp-controller="FileAccess" asp-action="EditAccess">File Permissions</a>
+                                        <a class="dropdown-item" asp-controller="FileUpload" asp-action="UpdatePermissions">Update Permissions</a>                                  
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown">
@@ -317,27 +322,40 @@
             dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
         }
 
-        $(document).ready(function () {
-            $('#googleCloudDropdown').on('click', function (event) {
-                event.preventDefault();
-                $(this).next('.dropdown-menu').toggle();
-                $('#googleDriveDropdown').next('.dropdown-menu').hide(); // Hide the other dropdown
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdowns = document.querySelectorAll('.dropdown-toggle');
 
-            $('#googleDriveDropdown').on('click', function (event) {
+        dropdowns.forEach(dropdown => {
+            dropdown.addEventListener('click', function (event) {
                 event.preventDefault();
-                $(this).next('.dropdown-menu').toggle();
-                $('#googleCloudDropdown').next('.dropdown-menu').hide(); // Hide the other dropdown
-            });
+                const targetDropdown = document.querySelector(`#${event.currentTarget.id} + .dropdown-menu`);
 
-            $(document).on('click', function (event) {
-                if (!$(event.target).closest('#googleCloudDropdown').length) {
-                    $('#googleCloudDropdown').next('.dropdown-menu').hide();
-                }
-                if (!$(event.target).closest('#googleDriveDropdown').length) {
-                    $('#googleDriveDropdown').next('.dropdown-menu').hide();
+                // Hide other dropdowns
+                dropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== event.currentTarget) {
+                        const otherDropdownMenu = document.querySelector(`#${otherDropdown.id} + .dropdown-menu`);
+                        otherDropdownMenu.style.display = 'none';
+                    }
+                });
+
+                // Toggle the current dropdown
+                if (targetDropdown.style.display === 'block') {
+                    targetDropdown.style.display = 'none';
+                } else {
+                    targetDropdown.style.display = 'block';
                 }
             });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (event) {
+            if (!event.target.matches('.dropdown-toggle')) {
+                dropdowns.forEach(dropdown => {
+                    const dropdownMenu = document.querySelector(`#${dropdown.id} + .dropdown-menu`);
+                    dropdownMenu.style.display = 'none';
+                });
+            }
+        });
         });
     </script>
 
