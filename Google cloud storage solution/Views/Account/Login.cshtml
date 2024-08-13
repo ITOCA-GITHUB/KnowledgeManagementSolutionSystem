@@ -4,37 +4,36 @@
     ViewData["Title"] = "Login";
 }
 
-
-
 <style>
-
     .container2 {
-        justify-content: center;
         display: flex;
-        height: 600px;
+        justify-content: center;
         align-items: center;
+        height: 75vh; /* Full viewport height */
     }
 
     .wrapper {
-        width: 420px;
+        width: 500px;
         background: #f0ad4e;
         border: 5px solid black;
         backdrop-filter: blur(4px);
         color: #fff;
-        border-radius: 12px;
-        padding: 30px 40px;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
         .wrapper h1 {
-            font-size: 36px;
+            font-size: 40px;
             text-align: center;
+            margin-bottom: 30px;
         }
 
         .wrapper .input-box {
             position: relative;
             width: 100%;
-            height: 50px;
-            margin: 30px 0;
+            height: 60px;
+            margin: 20px 0;
         }
 
     .input-box input {
@@ -43,35 +42,35 @@
         background: transparent;
         border: none;
         outline: none;
-        border: 1px solid white;
-        border-radius: 10px;
-        font-size: 16px;
+        border: 2px solid white;
+        border-radius: 12px;
+        font-size: 18px;
         color: #fff;
-        padding: 20px 45px 20px 20px;
+        padding: 15px 20px;
     }
 
         .input-box input::placeholder {
-            color: #fff;
+            color: #111;
         }
 
     .input-box i {
         position: absolute;
         right: 20px;
-        top: 30%;
-        transform: translate(-50%);
-        font-size: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 22px;
     }
 
     .wrapper .checkbox1 {
         display: flex;
         justify-content: space-between;
-        font-size: 14.5px;
-        margin: -15px 0 15px;
+        font-size: 16px;
+        margin: 10px 0;
     }
 
     .checkbox1 label input {
         accent-color: #fff;
-        margin-right: 3px;
+        margin-right: 5px;
     }
 
     .checkbox1 a {
@@ -85,33 +84,36 @@
 
     .wrapper .btn {
         width: 100%;
-        height: 45px;
+        height: 50px;
         background: #fff;
         border: none;
         outline: none;
-        border-radius: 10px;
+        border-radius: 12px;
         border: 1px solid white;
-        box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         cursor: pointer;
-        font-size: 16px;
+        font-size: 18px;
         color: #333;
         font-weight: 600;
     }
 
     .wrapper .link {
-        font-size: 14.5px;
+        font-size: 16px;
         text-align: center;
-        margin: 20px 0 15px;
+        margin: 20px 0;
+        color: black;
+    }
+
+    .alert-danger {
+        border-radius: 12px;
+        padding: 20px;
+        font-size: 18px;
     }
 </style>
 
-<br />
-
-<div class="container2" style="height:stretch">
+<div class="container2">
     <div class="wrapper" id="loginFormContent">
-
         <form asp-action="Login" method="post">
-
             <h1>Login</h1>
 
             @if (!ViewData.ModelState.IsValid)
@@ -141,14 +143,13 @@
                 <label><a asp-action="ForgotPassword" asp-controller="Account">Forgot Password</a></label>
             </div>
             <button type="submit" class="btn">Login</button>
-            <br />
-            <br />
-            <p>Don't have an account? <a asp-action="Register" asp-controller="Account">Register</a></p>
-
+            <div class="link">
+                <p>Don't have an account? <a asp-action="Register" asp-controller="Account">Register</a></p>
+            </div>
         </form>
-
     </div>
 </div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -16,11 +16,18 @@
     /* Navbar styles */
     .navbar {
         background-color: #f0ad4e;
+        padding: -15px;
+    }
+
+    .navbar-nav .nav-item {
+        margin-left: 8px;
+        margin-right: 8px;
     }
 
     .navbar-nav .nav-link {
-        color: white !important;
+        color: #fff !important;
         font-weight: bold;
+        padding: 8px 15px;
     }
 
     .navbar-toggler {
@@ -118,7 +125,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark background-color: #f0ad4e border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ITOCA Knowledge Management System</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -222,7 +229,7 @@
                                     <div class="dropdown-menu" aria-labelledby="googleCloudDropdown">
                                         <a class="dropdown-item" asp-controller="FileUpload" asp-action="UploadToGoogleCLoud">Upload to Google Cloud</a>
                                         <a class="dropdown-item" asp-controller="FileUpload" asp-action="UpdatePermissions">Update Permissions</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="FileAccess" asp-action="EditAccess">File Permissions</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="FileAccess" asp-action="EditAccess">File Permissions</a>
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown">

@@ -5,24 +5,77 @@
 <style>
     .form-control-file {
         border: 1px solid #ced4da;
-        border-radius: 4px;
-        padding: 5px;
+        border-radius: 12px;
+        padding: 15px;
         display: block;
         width: 100%;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+
+        .form-control-file:focus {
+            border-color: #80bdff;
+            outline: none;
+        }
+
+    .upload-form {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 40px;
+        background-color: #f8f9fa;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+        .upload-form label {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+    .btn-primary {
+        background-color: #f0ad4e;
+        border-color: #f0ad4e;
+        border-radius: 12px;
+        padding: 15px 25px;
+        font-size: 20px;
+        width: 100%;
+        max-width: 200px;
+    }
+
+        .btn-primary:hover {
+            background-color: #f0ad4e;
+            border-color: #d9534f;
+        }
+
+    .alert-info {
+        border-color: #b8daff;
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border-radius: 12px;
+        padding: 20px;
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    .text-center {
+        text-align: center;
     }
 </style>
 
-<h2 class="text-center mt-4">Google Cloud Image and Video Upload</h2>
+<h2 class="text-center mt-4">Upload Image or Video to Google Cloud</h2>
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form asp-action="UploadToGoogleCloud" asp-controller="FileUpload" method="post" enctype="multipart/form-data" class="border p-4 shadow-sm bg-light rounded">
+        <div class="col-md-12">
+            <form asp-action="UploadToGoogleCloud" asp-controller="FileUpload" method="post" enctype="multipart/form-data" class="upload-form">
                 <div class="form-group">
-                    <label for="file" class="font-weight-bold">Choose image or video to upload:</label>
-                    <input type="file" name="file" id="file" accept=".mp4, .mpeg, .mkv, .wmv, .jpg, .jpeg, .png, .gif, .bmp, .tiff, .webp" class="form-control-file" />
+                    <label for="file">Select image or video files to upload:</label>
+                    <input type="file" name="file" id="file" accept=".mp4, .mpeg, .mkv, .wmv, .jpg, .jpeg, .png, .gif, .bmp, .tiff, .webp" class="form-control-file" multiple />
                 </div>
-                <button type="submit" class="btn btn-primary btn-block mt-3">Upload</button>
+                <button type="submit" class="btn btn-primary btn-block">Upload</button>
             </form>
 
             @if (ViewBag.Message != null)
@@ -32,4 +85,3 @@
         </div>
     </div>
 </div>
-
