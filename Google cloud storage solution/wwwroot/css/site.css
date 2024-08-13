@@ -22,6 +22,7 @@ body {
     padding: 0;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
+    background-image :url(../images/pngtree-modern-co-working-space-with-concrete-and-wood-accents-complete-with-picture-image_7232829.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -82,6 +83,7 @@ body {
 
 .footer {
     background-color: black;
+
 }
 
 .socials a {
@@ -89,6 +91,7 @@ body {
     background-color: white;
     margin: 10px;
     border-radius: 50%;
+    color: black;
 }
 
 /* Responsive styles */

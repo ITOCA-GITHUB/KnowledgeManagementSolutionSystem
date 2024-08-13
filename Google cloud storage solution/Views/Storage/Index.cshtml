@@ -6,10 +6,24 @@
 }
 
 <style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .content {
+        flex: 1;
+        padding: 20px;
+    }
+
     table {
-        width: 100%;
+        width: 1300px;
         border-collapse: collapse;
         background-color: white;
+        font-size: 18px;
+
     }
 
     th, td {
@@ -39,12 +53,18 @@
                 text-decoration: underline;
             }
 
+    .footer {
+     margin-top: 300px;
+    }
     .icon {
         width: 16px; /* Set the desired width */
         height: 16px; /* Set the desired height */
         margin-right: 8px; /* Optional: add some space between the icon and the text */
-        background-color: #f0ad4e;
         color: #f0ad4e;
+    }
+    .icon img {
+            background-color: #f0ad4e;
+            color: #f0ad4e;
     }
 </style>
 
@@ -54,75 +74,77 @@
     var signedUrls = ViewBag.SignedUrls as Dictionary<string, string>;
 }
 
-<div class="breadcrumb">
-    @if (prefixPath.Any())
-    {
-        for (int i = 0; i < prefixPath.Count; i++)
+<div class="content">
+    <div class="breadcrumb">
+        @if (prefixPath.Any())
         {
-            var path = string.Join("/", prefixPath.Take(i + 1));
-            <a href="@Url.Action("Index", new { prefix = path })">@prefixPath[i]</a>
-            @if (i < prefixPath.Count - 1)
+            for (int i = 0; i < prefixPath.Count; i++)
             {
-                <span> / </span>
+                var path = string.Join("/", prefixPath.Take(i + 1));
+                <a href="@Url.Action("Index", new { prefix = path })">@prefixPath[i]</a>
+                @if (i < prefixPath.Count - 1)
+                {
+                    <span> / </span>
+                }
             }
         }
-    }
-</div>
+    </div>
 
-<div>
-    @if (prefixPath.Any())
-    {
-        <a href="@Url.Action("Index", new { prefix = string.Join("/", prefixPath.Take(prefixPath.Count - 1)) })">Up</a>
-    }
+    <div>
+        @if (prefixPath.Any())
+        {
+            <a href="@Url.Action("Index", new { prefix = string.Join("/", prefixPath.Take(prefixPath.Count - 1)) })">Up</a>
+        }
 
-    <form method="post" action="@Url.Action("CreateFolder")">
-        <input type="hidden" name="parentFolderPath" value="@prefix" />
-        <label for="newFolderName">New Folder Name:</label>
-        <input type="text" id="newFolderName" name="newFolderName" required />
-        <button type="submit">Create Folder</button>
-    </form>
+        <form method="post" action="@Url.Action("CreateFolder")">
+            <input type="hidden" name="parentFolderPath" value="@prefix" />
+            <label for="newFolderName">New Folder Name:</label>
+            <input type="text" id="newFolderName" name="newFolderName" required />
+            <button type="submit">Create Folder</button>
+        </form>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Last Modified</th>
-                <th>Size</th>
-                <th>Download Link</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+        <table>
+            <thead>
                 <tr>
-                    <td>
-                        @if (item.IsFolder)
-                        {
-                            <a href="@Url.Action("Index", new { prefix = item.Name })">
-                                <img src="~/images/Folder.png" class="icon" /> @item.Name.TrimEnd('/')
-                            </a>
-                        }
-                        else
-                        {
-                            <img src="~/images/file.png" class="icon" /> @item.Name
-                        }
-                    </td>
-                    <td>@item.LastModified?.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                    <td>@item.Size?.ToString("N0")</td>
-                    <td>
-                        @if (!item.IsFolder && signedUrls != null && signedUrls.TryGetValue(item.Name, out var url))
-                        {
-                            <a href="@url" target="_blank">Download</a>
-                        }
-                        else
-                        {
-                            
-                            }
-                    </td>
+                    <th>Name</th>
+                    <th>Last Modified</th>
+                    <th>Size</th>
+                    <th>Download Link</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (item.IsFolder)
+                            {
+                                <a href="@Url.Action("Index", new { prefix = item.Name })">
+                                    <img src="~/images/Folder.png" class="icon" /> @item.Name.TrimEnd('/')
+                                </a>
+                            }
+                            else
+                            {
+                                <img src="~/images/file.png" class="icon" /> @item.Name
+                            }
+                        </td>
+                        <td>@item.LastModified?.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        <td>@item.Size?.ToString("N0")</td>
+                        <td>
+                            @if (!item.IsFolder && signedUrls != null && signedUrls.TryGetValue(item.Name, out var url))
+                            {
+                                <a href="@url" target="_blank">Download</a>
+                            }
+                            else
+                            {
+
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
