@@ -177,21 +177,28 @@ namespace Google_cloud_storage_solution.Controllers
 
         private void ExportActivityDetailsToExcel(UserActivity activity)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "login_details.xlsx");
-
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            try
             {
-                var worksheet = package.Workbook.Worksheets.FirstOrDefault() ?? package.Workbook.Worksheets.Add("ActivityDetails");
-                var rowCount = worksheet.Dimension?.Rows ?? 0;
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logs", "login_details.xlsx");
 
-                worksheet.Cells[rowCount + 1, 1].Value = activity.UserName;
-                worksheet.Cells[rowCount + 1, 2].Value = activity.PageName;
-                worksheet.Cells[rowCount + 1, 3].Value = activity.EntryTime.ToString(@"hh\:mm\:ss");
-                worksheet.Cells[rowCount + 1, 4].Value = activity.ExitTime.ToString(@"hh\:mm\:ss");
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-                package.Save();
+                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                {
+                    var worksheet = package.Workbook.Worksheets.FirstOrDefault() ?? package.Workbook.Worksheets.Add("ActivityDetails");
+                    var rowCount = worksheet.Dimension?.Rows ?? 0;
+
+                    worksheet.Cells[rowCount + 1, 1].Value = activity.UserName;
+                    worksheet.Cells[rowCount + 1, 2].Value = activity.PageName;
+                    worksheet.Cells[rowCount + 1, 3].Value = activity.EntryTime.ToString(@"hh\:mm\:ss");
+                    worksheet.Cells[rowCount + 1, 4].Value = activity.ExitTime.ToString(@"hh\:mm\:ss");
+
+                    package.Save();
+                }
+            }        
+            catch (Exception ex) {
+
+                throw new Exception("cannot write to activity details excel file, please refresh the page");
             }
         }
 

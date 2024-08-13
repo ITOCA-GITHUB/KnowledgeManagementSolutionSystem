@@ -56,16 +56,36 @@
     .footer {
      margin-top: 300px;
     }
+
     .icon {
-        width: 16px; /* Set the desired width */
-        height: 16px; /* Set the desired height */
-        margin-right: 8px; /* Optional: add some space between the icon and the text */
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
         color: #f0ad4e;
     }
-    .icon img {
+
+        .icon img {
             background-color: #f0ad4e;
             color: #f0ad4e;
+        }
+
+    label[for="newFolderName"] {
+        color: white; /* Change label color to white */
+        font-size: 20px; /* Increase label text size */
     }
+
+    button {
+        font-size: 18px; /* Increase button text size */
+        background-color: #f0ad4e; /* Set button background color to match folder icon */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #e69533; /* Slightly darker shade on hover */
+        }
 </style>
 
 @{
@@ -125,7 +145,7 @@
                             }
                             else
                             {
-                                <img src="~/images/file.png" class="icon" /> @item.Name
+                                <img src="~/images/Document-File-Icon.png" class="icon" /> @item.Name
                             }
                         </td>
                         <td>@item.LastModified?.ToString("dd/MM/yyyy HH:mm:ss")</td>

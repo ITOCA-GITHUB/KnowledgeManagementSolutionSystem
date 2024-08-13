@@ -110,6 +110,12 @@
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 0.25rem;
     }
+
+    /* Logo styles */
+    .navbar-brand-logo {
+        margin-right: 10px; /* Add space after the logo */
+        border-radius: 8px; /* Make edges more rounded */
+    }
 </style>
 
 <!DOCTYPE html>
@@ -128,6 +134,8 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
+                <img src="~/images/ITOCA logo.jpg" alt="Itoca Logo" width="100px" height="55px"
+                     class="navbar-brand-logo" />
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ITOCA Knowledge Management System</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -278,11 +286,11 @@
             <div class="socials">
                 <center>
                     <br />
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-browser-edge"></i></a>
+                <a href="https://www.facebook.com/ITOCAZA"><i class="bi bi-facebook" ></i></a>
+                <a href="https://www.linkedin.com/company/itoca/"><i class="bi bi-linkedin" ></i></a>
+                <a href="https://x.com/ITOCA_SA"><i class="bi bi-twitter-x" ></i></a>
+                <a href="https://www.instagram.com/itoca_sa/"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.itoca.org"><i class="bi bi-browser-edge" ></i></a>
                 </center>
 
                 <br />

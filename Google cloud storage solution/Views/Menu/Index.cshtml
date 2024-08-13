@@ -1,15 +1,18 @@
 ﻿@model IEnumerable<Google_cloud_storage_solution.Models.Menu>
 
 <style>
+    /* Styles for the footer */
     .footer {
         margin-top: 500px;
     }
 
+    /* Styles for the main navbar */
     .navbarmenu {
         background-color: #000;
         padding: -15px;
     }
 
+    /* Styles for the navbar links */
     .navbar-nav .nav-item {
         margin-left: 8px;
         margin-right: 8px;
@@ -20,44 +23,88 @@
         font-weight: bold;
         padding: 8px 15px;
     }
+
+    /* Styles for the vertical menu */
+    .vertical-menu {
+        width: 400px; /* Width of the vertical menu */
+        background-color: #000;
+        position: absolute; /* Position it within the layout */
+        top: 60px; /* Adjust according to the navbar height */
+        left: 0;
+        overflow-x: hidden; /* Disable horizontal scroll */
+        overflow-y: auto; /* Enable vertical scroll */
+        height: calc(95vh - 120px); /* Adjust height to fit within navbar and footer */
+        padding: 20px 0; /* Padding for the menu */
+        color: #fff;
+        margin-top: 15px;
+        text-align: left; /* Align items to the right */
+    }
+
+        .vertical-menu a {
+            display: block;
+            background-color: black;
+            color: #fff;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: left; /* Ensure text in links is aligned right */
+        }
+
+            .vertical-menu a:hover {
+                background-color: #444;
+            }
+
+        /* Styles for the dropdown menu */
+        .vertical-menu .dropdown-menu {
+            position: relative; /* Position relative to the parent .nav-item */
+            margin-right: -400px; /* Align to the right of the .nav-item */
+            background-color: #000; /* Match the vertical menu background */
+            border: none; /* Remove default border */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Optional: Add shadow for better visibility */
+        }
+
+        .vertical-menu .dropdown-item {
+            color: #fff;
+            text-align: left; /* Align text to the right in dropdown items */
+        }
+
+            .vertical-menu .dropdown-item:hover {
+                background-color: #444; /* Hover effect for dropdown items */
+            }
+
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <a class="navbar-brand" href="#"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            @if (Model != null)
+<!-- Vertical Menu -->
+<div class="vertical-menu">
+    <ul class="navbar-nav">
+        @if (Model != null)
+        {
+            @foreach (var menu in Model)
             {
-                @foreach (var menu in Model)
-                {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-@menu.MenuId" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            @menu.Title
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown-@menu.MenuId">
-                            @if (menu.MenuItems != null)
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-@menu.MenuId" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @menu.Title
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown-@menu.MenuId">
+                        @if (menu.MenuItems != null)
+                        {
+                            @foreach (var menuItem in menu.MenuItems)
                             {
-                                @foreach (var menuItem in menu.MenuItems)
-                                {
-                                    <a class="dropdown-item" href="@Url.Action("MenuItemDetails", "MenuItem", new { id = menuItem.MenuItemId })">@menuItem.Title</a>
-                                }
+                                <a class="dropdown-item" href="@Url.Action("MenuItemDetails", "MenuItem", new { id = menuItem.MenuItemId })">@menuItem.Title</a>
                             }
-                        </div>
-                    </li>
-                }
+                        }
+                    </div>
+                </li>
             }
-        </ul>
-        <a href="@Url.Action("CreateMenu", "Menu")" class="btn btn-primary ml-auto">Add Menu</a>
-        <a href="@Url.Action("CreateMenuItem", "Menu")" class="btn btn-secondary ml-2">Add Menu Item</a>
-    </div>
-</nav>
+        }
+    </ul>
+    <a href="@Url.Action("CreateMenu", "Menu")" class="btn btn-primary">Add Menu</a>
+    <a href="@Url.Action("CreateMenuItem", "Menu")" class="btn btn-secondary mt-2">Add Menu Item</a>
+</div>
 
-<!-- Add these script tags to ensure Bootstrap JS and jQuery are included -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Ensure jQuery and Bootstrap JS are properly loaded -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 <script>
     $(document).ready(function () {

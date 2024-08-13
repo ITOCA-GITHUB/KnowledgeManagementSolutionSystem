@@ -3,7 +3,82 @@
     var folders = ViewBag.Folders as List<string> ?? new List<string>();
 }
 
-<h2>Upload File</h2>
+<style>
+    /* Styles for the footer */
+    .footer {
+        margin-top: 500px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #fff;
+        font-size: 28px; /* Increase heading font size */
+        margin-bottom: 20px;
+    }
+
+    form {
+        max-width: 500px; /* Limit form width for better layout */
+        margin: 0 auto;
+        background-color: #f8f9fa; /* Light background color */
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        color: #555; /* Darker label color for contrast */
+        font-size: 18px; /* Increase label text size */
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    select, input[type="file"] {
+        width: 100%;
+        font-size: 16px; /* Increase input font size */
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .FileText {
+        text-align: center;
+        margin-bottom: 30px; /* Spacing below the paragraph */
+        max-width: 600px; /* Constrain width for better readability */
+        margin: 0 auto 30px; /* Center the text and add bottom margin */
+        padding: 10px 20px; /* Padding for spacing around text */
+        border-radius: 8px; /* Rounded corners for the div */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    }
+
+        .FileText strong {
+            color: #fff; /* Slightly darker color for emphasis */
+        }
+
+
+    button {
+        font-size: 20px; /* Increase button text size */
+        background-color: #f0ad4e; /* Set button background color */
+        border: none;
+        color: white;
+        padding: 12px 25px;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+        button:hover {
+            background-color: #e69533; /* Slightly darker shade on hover */
+        }
+</style>
+
+<h2>Storage Folder File Upload</h2>
+
+<div class="FileText">
+    <p style="text-align: center; color: #fff; font-size: 20px; margin-bottom: 30px;">
+        The <strong>Upload File Form</strong> allows users to upload files to a specific folder within the system. Select a destination folder from the dropdown list and choose a file from your device to upload. Ensure all necessary fields are completed before submission for an efficient and straightforward file upload process.
+    </p>
+</div>
 
 <form asp-controller="Storage" asp-action="UploadFile" enctype="multipart/form-data" method="post">
     <div>
@@ -18,7 +93,7 @@
     </div>
     <div>
         <label for="file">Select file:</label>
-        <input type="file" name="file" id="file" required />
+        <input type="file" name="file" id="file" required multiple />
     </div>
     <button type="submit">Upload</button>
 </form>
