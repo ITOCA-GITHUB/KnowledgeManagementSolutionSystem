@@ -110,49 +110,61 @@ namespace Google_cloud_storage_solution.Controllers
         {
             if (ModelState.IsValid)
             {
-                var hashedPassword = (model.Password); // Hash the provided password
-                var user = _dbContext.Users.FirstOrDefault(u => u.UserName == model.Username && u.PasswordHash == hashedPassword);
-                if (user != null)
+                try
                 {
-                    var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
-                new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-                new Claim(ClaimTypes.Role, user.Role ?? string.Empty)
-            };
+                    var hashedPassword = (model.Password); // Hash the provided password
+                    var user = _dbContext.Users.FirstOrDefault(u => u.UserName == model.Username && u.PasswordHash == hashedPassword);
 
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var authProperties = new AuthenticationProperties
+                    if (user != null)
                     {
-                        IsPersistent = model.RememberMe
-                    };
+                        var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+                    new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
+                    new Claim(ClaimTypes.Role, user.Role ?? string.Empty)
+                };
 
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-                    HttpContext.Session.SetString("Username", user.UserName ?? string.Empty);
-                    HttpContext.Session.SetString("Role", user.Role ?? string.Empty);
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var authProperties = new AuthenticationProperties
+                        {
+                            IsPersistent = model.RememberMe
+                        };
 
-                    var currentTime = DateTime.Now;
-                    user.LastLoginTime = currentTime.TimeOfDay;
-                    _dbContext.SaveChanges();
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                        HttpContext.Session.SetString("Username", user.UserName ?? string.Empty);
+                        HttpContext.Session.SetString("Role", user.Role ?? string.Empty);
 
-                    // Create a new session record
-                    var userSession = new UserSessions
+                        var currentTime = DateTime.Now;
+                        user.LastLoginTime = currentTime.TimeOfDay;
+                        _dbContext.SaveChanges();
+
+                        // Create a new session record
+                        var userSession = new UserSessions
+                        {
+                            UserId = user.UserId,
+                            LoginTime = DateTime.Now,
+                            IsIdle = false
+                        };
+
+                        _dbContext.UserSessions.Add(userSession);
+                        _dbContext.SaveChanges();
+
+                        ExportLoginDetailsToExcel(user.UserName, userSession.LoginTime.TimeOfDay);
+
+                        return RedirectToAction("HomePage", "Home");
+                    }
+                    else
                     {
-                        UserId = user.UserId,
-                        LoginTime = DateTime.Now,
-                        IsIdle = false
-                    };
-
-                    _dbContext.UserSessions.Add(userSession);
-                    _dbContext.SaveChanges();
-
-                    ExportLoginDetailsToExcel(user.UserName, userSession.LoginTime.TimeOfDay);
-
-                    return RedirectToAction("HomePage", "Home");
+                        ModelState.AddModelError(string.Empty, "Invalid username or password.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid username or password.");
+                    // Log the exception (optional)
+                    // _logger.LogError(ex, "An error occurred during login.");
+
+                    // Add a generic error message
+                    ModelState.AddModelError(string.Empty, "The server is currently unavailable or is still turning on. Please try again later or refresh the page.");
                 }
             }
             else
@@ -162,6 +174,7 @@ namespace Google_cloud_storage_solution.Controllers
 
             return View(model);
         }
+
 
         [HttpGet]
         [Route("Account/Logout")]

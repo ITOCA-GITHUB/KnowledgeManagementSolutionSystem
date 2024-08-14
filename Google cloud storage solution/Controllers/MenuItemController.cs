@@ -23,6 +23,10 @@ namespace Google_cloud_storage_solution.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            if (HttpContext.Session.GetString("UserId") == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View(await _dbContext.MenuItem.ToListAsync());
         }
 
@@ -198,7 +202,7 @@ namespace Google_cloud_storage_solution.Controllers
             }        
             catch (Exception ex) {
 
-                throw new Exception("cannot write to activity details excel file, please refresh the page");
+               ModelState.AddModelError(string.Empty, "cannot write to activity details excel file, please refresh the page");
             }
         }
 

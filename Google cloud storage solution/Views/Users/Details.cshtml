@@ -4,10 +4,29 @@
     ViewData["Title"] = "User Details";
 }
 
+<style>
+    .card-body {
+        background-color: black; /* User details background color */
+        color: #f0ad4e; /* Text color */
+    }
+
+    .card-footer .btn-warning {
+        background-color: #f0ad4e; /* Edit button color */
+        border-color: #f0ad4e;
+        color: black;
+    }
+
+    .card-footer .btn-secondary {
+        background-color: black; /* Back to List button background color */
+        border-color: #f0ad4e;
+        color: #f0ad4e;
+    }
+</style>
+
 <div class="container mt-5">
     <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h2 class="mb-0">@ViewData["Title"]</h2>
+        <div class="card-header bg-white bg-gradient">
+            <h2 class="mb-0">User Details</h2>
         </div>
         <div class="card-body">
             <h4 class="card-title">User Information</h4>

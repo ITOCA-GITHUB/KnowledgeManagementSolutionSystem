@@ -29,7 +29,7 @@
         }
 
         .table th {
-            background-color: #007bff; /* Added background color to header */
+            background-color: #f0ad4e; /* Added background color to header */
             color: white;
             font-size: 18px; /* Changed heading size to 18px */
         }
@@ -38,7 +38,7 @@
     .create-button {
         display: inline-block;
         padding: 10px 20px;
-        background-color: #007bff;
+        background-color: #f0ad4e;
         color: white;
         text-decoration: none;
         border-radius: 5px;
@@ -46,15 +46,28 @@
     }
 
         .create-button:hover {
-            background-color: #0056b3;
+            background-color: #f0ad4e;
         }
+
+        h1 {
+            text-align: center;
+        color: #f0ad4e;
+        }
+
+    .TextCreate a {
+        color: black; /* Change text color to black */
+        font-size: 28px; /* Set font size to 18px */
+    }
 </style>
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="TextCreate">
+    <p>
+        <a asp-action="Create">Create New User</a>
+    </p>
+</div>
+
 <table class="table">
     <thead>
         <tr>

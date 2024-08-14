@@ -36,10 +36,12 @@ namespace Google_cloud_storage_solution.Controllers
 
         public IActionResult HomePage()
         {
+           
             TimeTracking(nameof(HomePage));
             var role = "Admin"; // Or retrieve the actual role from your authentication system
             ViewData["Role"] = role;
             return View();
+
         }
 
         public IActionResult AboutUs()

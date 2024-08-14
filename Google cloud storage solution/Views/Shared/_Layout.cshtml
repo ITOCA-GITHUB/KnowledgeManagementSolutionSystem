@@ -20,8 +20,8 @@
     }
 
     .navbar-nav .nav-item {
-        margin-left: 8px;
-        margin-right: 8px;
+        margin-left: 4px;
+        margin-right: 4px;
     }
 
     .navbar-nav .nav-link {
@@ -153,11 +153,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Storage" asp-action="Index">Storage </a>
-                                </li>                              
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Cloud_File_Index" asp-action="Index">Cloud File Index</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="StorageDropdown" role="button">
+                                        Storage
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="StorageDropdown">
+                                        <a class="dropdown-item" asp-controller="Storage" asp-action="Index">Storage View</a>
+                                        <a class="dropdown-item" asp-controller="Storage" asp-action="UploadFile">Upload File</a>
+                                    </div>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="FileIndex" asp-action="Index">File Index</a>
@@ -172,7 +175,6 @@
                                     <div class="dropdown-menu" aria-labelledby="googleCloudDropdown">
                                         <a class="dropdown-item" asp-controller="FileUpload" asp-action="UploadToGoogleCLoud">Upload to Google Cloud</a>
                                         <a class="dropdown-item" asp-controller="FileUpload" asp-action="UpdatePermissions">Update Permissions</a>
-                                        <a class="dropdown-item" asp-controller="FileAccess" asp-action="EditAccess">File Permissions</a>
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown">
