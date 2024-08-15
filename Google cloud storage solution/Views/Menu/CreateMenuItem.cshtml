@@ -3,6 +3,32 @@
     var menus = ViewBag.Menus as List<Google_cloud_storage_solution.Models.Menu>;
 }
 
+<style>
+    .form-group label {
+        color: white; /* Change labels to white */
+        font-size: 20px;
+    }
+
+    h1, h2 {
+        color: #f0ad4e;
+    }
+
+    .form-group input[type="submit"] {
+        background-color: black; /* Primary button color */
+        color: #f0ad4e;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 10px;
+        border-radius: 4px;
+        width: 150px;
+    }
+
+    .footer {
+        margin-top: 350px;
+    }
+</style>
+
 <h2>Create Menu Item</h2>
 
 <form asp-action="CreateMenuItem" method="post">
@@ -15,11 +41,6 @@
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Url"></label>
-        <input asp-for="Url" class="form-control" />
-        <span asp-validation-for="Url" class="text-danger"></span>
-    </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="btn btn-dark">Create</button>
 </form>

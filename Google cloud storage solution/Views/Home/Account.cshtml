@@ -4,184 +4,119 @@
     ViewData["Title"] = "Account";
 }
 
-
 <style>
     body {
-        background-color: #f9f9fa
+        background-color: #f9f9fa; /* Light gray background for a clean look */
     }
 
-    .padding {
-        padding: 3rem !important
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
     }
 
     .user-card-full {
         overflow: hidden;
-    }
-
-    .card {
-        border-radius: 5px;
-        -webkit-box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
-        box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
-        border: none;
-        margin-bottom: 30px;
-    }
-
-    .m-r-0 {
-        margin-right: 0px;
-    }
-
-    .m-l-0 {
-        margin-left: 0px;
-    }
-
-    .user-card-full .user-profile {
-        border-radius: 5px 0 0 5px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff; /* White background for the card */
     }
 
     .bg-c-lite-green {
-        background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
         background: linear-gradient(to right, #ee5a6f, #f29263);
+        padding: 2rem;
+        border-radius: 10px 0 0 10px;
+        color: #fff;
+        text-align: center;
     }
 
-    .user-profile {
-        padding: 20px 0;
+    .newuser-profile img {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
     }
 
-    .card-block {
-        padding: 1.25rem;
+    .newuser-profile h6 {
+        font-size: 16px;
+        margin: 1rem 0;
     }
 
-    .m-b-25 {
-        margin-bottom: 25px;
+    .newuser-profile p {
+        font-size: 20px;
+        margin-bottom: 1rem;
     }
 
-    .img-radius {
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
         border-radius: 5px;
+        padding: 0.5rem 1rem;
+        color: #fff;
+        font-size: 16px;
     }
 
-
-
-    h6 {
-        font-size: 14px;
-    }
-
-    .card .card-block p {
-        line-height: 25px;
-    }
-
-    /*  only screen and (min-width: 1400px){
-    p {
-        font-size: 14px;
-    }
-
-    } */
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
 
     .card-block {
-        padding: 1.25rem;
+        padding: 2rem;
     }
 
-    .b-b-default {
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    .m-b-20 {
-        margin-bottom: 20px;
-    }
-
-    .p-b-5 {
-        padding-bottom: 5px !important;
-    }
-
-    .card .card-block p {
-        line-height: 25px;
-    }
-
-    .m-b-10 {
-        margin-bottom: 10px;
-    }
+        .card-block h6 {
+            font-size: 16px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
 
     .text-muted {
-        color: #919aa3 !important;
-    }
-
-    .b-b-default {
-        border-bottom: 1px solid #e0e0e0;
+        color: #6c757d;
     }
 
     .f-w-600 {
         font-weight: 600;
     }
 
-    .m-b-20 {
-        margin-bottom: 20px;
+    .f-w-400 {
+        font-weight: 400;
     }
 
-    .m-t-40 {
-        margin-top: 20px;
+    .row > .col-sm-6 {
+        margin-bottom: 1rem;
     }
-
-    .p-b-5 {
-        padding-bottom: 5px !important;
-    }
-
-    .m-b-10 {
-        margin-bottom: 10px;
-    }
-
-    .m-t-40 {
-        margin-top: 20px;
-    }
-
-    .user-card-full .social-link li {
-        display: inline-block;
-    }
-
-        .user-card-full .social-link li a {
-            font-size: 20px;
-            margin: 0 10px 0 0;
-            -webkit-transition: all 0.3s ease-in-out;
-            transition: all 0.3s ease-in-out;
-        }
-
 </style>
-<div class="page-content page-container" id="page-content">
-    <div class="padding">
-        <div class="row container d-flex justify-content-center">
-            <div class="col-xl-6 col-md-12">
-                <div class="card user-card-full">
-                    <div class="row m-l-0 m-r-0">
-                        <div class="col-sm-4 bg-c-lite-green user-profile">
-                            <div class="card-block text-center text-white">
-                                <div class="m-b-25">
-                                    <img src="https://img.icons8.com/bubbles/100/000000/user.png" class="img-radius" alt="User-Profile-Image">
-                                </div>
-                                <h6 class="f-w-600">@Model.Fullname</h6>
-                                <p>@Model.Role</p>
-                                <a asp-action="Edit" asp-controller="Users" asp-route-id="@Model.UserId" class="btn btn-primary">Edit</a>
-                                <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
-                            </div>
+
+<div class="container">
+    <div class="user-card-full">
+        <div class="row no-gutters">
+            <div class="col-sm-4 bg-c-lite-green newuser-profile">
+                <div class="text-center">
+                    <img src="https://img.icons8.com/bubbles/100/000000/user.png" alt="User-Profile-Image">
+                    <h6 class="mt-3">@Model.Fullname</h6>
+                    <p>@Model.Role</p>
+                    <a asp-action="Edit" asp-controller="Users" asp-route-id="@Model.UserId" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="card-block">
+                    <h6>Details</h6>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="f-w-600">Email</p>
+                            <h6 class="text-muted f-w-400">@Model.Email</h6>
                         </div>
-                        <div class="col-sm-8">
-                            <div class="card-block">
-                                <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Details</h6>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p class="m-b-10 f-w-600">Email</p>
-                                        <h6 class="text-muted f-w-400">@Model.Email</h6>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="m-b-10 f-w-600">Phone</p>
-                                        <h6 class="text-muted f-w-400">@Model.PhoneNumber</h6>
-                                    </div>
-                                </div>
-                                <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Location</h6>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p class="m-b-10 f-w-600">Address</p>
-                                        <h6 class="text-muted f-w-400"> @Model.PhysicalAddress</h6>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-sm-6">
+                            <p class="f-w-600">Phone</p>
+                            <h6 class="text-muted f-w-400">@Model.PhoneNumber</h6>
+                        </div>
+                    </div>
+                    <h6 class="mt-4">Location</h6>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="f-w-600">Address</p>
+                            <h6 class="text-muted f-w-400">@Model.PhysicalAddress</h6>
                         </div>
                     </div>
                 </div>
