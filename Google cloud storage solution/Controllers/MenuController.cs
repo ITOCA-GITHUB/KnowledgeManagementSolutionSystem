@@ -67,5 +67,60 @@ namespace Google_cloud_storage_solution.Controllers
             ViewBag.Menus = menus;
             return View(model);
         }
+
+        // GET: /Menu/DeleteMenu/5
+        [HttpGet]
+        public async Task<IActionResult> DeleteMenu(int id)
+        {
+            var menu = await _context.Menu
+                .Include(m => m.MenuItems)
+                .FirstOrDefaultAsync(m => m.MenuId == id);
+
+            if (menu == null)
+            {
+                return NotFound();
+            }
+
+            return View(menu);
+        }
+
+        public async Task<IActionResult> DeleteMenuConfirmed(int id)
+        {
+            var menu = await _context.Menu.FindAsync(id);
+            if (menu != null)
+            {
+                _context.Menu.Remove(menu);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: /Menu/DeleteMenuItem/5
+        [HttpGet]
+        public async Task<IActionResult> DeleteMenuItem(int id)
+        {
+            var menuItem = await _context.MenuItem
+                .FirstOrDefaultAsync(mi => mi.MenuItemId == id);
+
+            if (menuItem == null)
+            {
+                return NotFound();
+            }
+
+            return View(menuItem);
+        }
+
+        public async Task<IActionResult> DeleteMenuItemConfirmed(int id)
+        {
+            var menuItem = await _context.MenuItem.FindAsync(id);
+            if (menuItem != null)
+            {
+                _context.MenuItem.Remove(menuItem);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
