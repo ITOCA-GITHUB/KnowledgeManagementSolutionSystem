@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Storage.v1;
 using Google.Cloud.Storage.V1;
 using Google_cloud_storage_solution.Databases;
 using Google_cloud_storage_solution.Models;
@@ -160,6 +161,76 @@ namespace Google_cloud_storage_solution.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SelectFolderOrFileToDelete(string prefix = "")
+        {
+            var bucketName = "kms_cloud_storage";
+            var storageObjects = await _cloudStorageService.ListObjectsAsync(bucketName, prefix);
+
+            // Retrieve the current user's email
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User email is required.");
+            }
+
+            var folders = await GetFoldersAsync(userEmail);
+            ViewBag.Folders = folders;
+
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                // Check if the user is from the Executive department
+                var user = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+                if (user != null && user.Department == "Executive")
+                {
+                    // If the user is from the Executive department, show all folders
+                    // No additional filtering is needed
+                }
+                else
+                {
+                    // Normalize the email and filter storage objects to only show folders that match the user's email
+                    var normalizedEmail = userEmail.Trim().ToLower();
+                    storageObjects = storageObjects
+                        .Where(obj => obj.Name.Split('/').Any(part => part.Trim().ToLower() == normalizedEmail))
+                        .ToList();
+                }
+            }
+
+            var signedUrls = storageObjects.ToDictionary(
+               obj => obj.Name,
+               obj => _cloudStorageService.GenerateSignedUrl(obj.Name, TimeSpan.FromHours(3)) // Adjust duration as needed
+             );
+
+            ViewBag.Prefix = prefix;
+            ViewBag.SignedUrls = signedUrls;
+            return View(storageObjects);
+        }
+
+        // POST: Handle the deletion of the selected folder or file
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmation(string selectedItem)
+        {
+            if (string.IsNullOrEmpty(selectedItem))
+            {
+                ModelState.AddModelError("", "No folder or file selected.");
+                var objects = await _cloudStorageService.ListObjectsAsync("kms_cloud_storage");
+                return View("SelectFolderOrFileToDelete", objects);
+            }
+
+            try
+            {
+                await _cloudStorageService.DeleteObjectAsync("kms_cloud_storage", selectedItem);
+                TempData["SuccessMessage"] = $"Successfully deleted {selectedItem}.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error deleting {selectedItem}: {ex.Message}";
+            }
+
+            return RedirectToAction("Index");
+        }
+
         private string GenerateSignedUrl(string objectName, int expirationMinutes = 60)
         {
             var credential = GoogleCredential.FromFile("GoogleStorageBucket.json");
@@ -244,19 +315,16 @@ namespace Google_cloud_storage_solution.Controllers
 
             // Normalize the user email for comparison
             var normalizedEmail = userEmail.Trim().ToLower();
-            Console.WriteLine($"Normalized User Email: {normalizedEmail}"); // Debugging print
 
             foreach (var obj in objects)
             {
                 // Ensure that the object is part of a folder and not a file
                 var parts = obj.Name.Split('/');
-                Console.WriteLine($"Object Name: {obj.Name}"); // Debugging print
 
                 if (parts.Length > 1)
                 {
                     // Extract the folder name
                     var folder = string.Join("/", parts.Take(parts.Length - 1));
-                    Console.WriteLine($"Extracted Folder: {folder}"); // Debugging print
 
                     // Check if the folder matches the user's email
                     if (parts.Length > 2 && parts[1].Trim().ToLower() == normalizedEmail)

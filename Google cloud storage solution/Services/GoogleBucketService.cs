@@ -1,4 +1,5 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using Google;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
 
@@ -88,6 +89,20 @@ namespace Google_cloud_storage_solution.Services
                 };
 
                 await _storageClient.UploadObjectAsync(bucketName, objectName, null, stream);
+            }
+        }
+
+        public async Task DeleteObjectAsync(string bucketName, string objectName)
+        {
+            try
+            {
+                await _storageClient.DeleteObjectAsync(bucketName, objectName);
+            }
+            catch (GoogleApiException e)
+            {
+                // Handle exceptions, for example: object not found, insufficient permissions, etc.
+                Console.WriteLine($"Error deleting object {objectName}: {e.Message}");
+                throw;
             }
         }
 

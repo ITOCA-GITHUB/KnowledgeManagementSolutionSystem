@@ -1,0 +1,63 @@
+﻿@model List<Google_cloud_storage_solution.Services.StorageObject>
+
+@{
+    ViewData["Title"] = "Select Folder or File to Delete";
+}
+
+<style>
+    .footer {
+        margin-top: 500px;
+    }
+
+    .selection-container {
+        padding: 20px;
+        max-width: 500px;
+        margin: auto;
+        text-align: center;
+        box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #fff;
+        background-color: dimgray;
+    }
+
+        .selection-container button {
+            font-size: 18px;
+            background-color: #f0ad4e;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+            .selection-container button:hover {
+                background-color: #e69533;
+            }
+
+        .selection-container select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+    .selection-container h2 {
+        color: white;
+    }
+</style>
+
+<div class="selection-container">
+    <h2>Select Folder or File to Delete</h2>
+    <form method="post" action="@Url.Action("DeleteConfirmation")">
+        <select name="selectedItem" required>
+            <option value="" disabled selected>Select a folder or file</option>
+            @foreach (var item in Model)
+            {
+                <option value="@item.Name">
+                    @item.Name
+                    @(item.IsFolder ? "(Folder)" : "(File)")
+                </option>
+            }
+        </select>
+        <button type="submit">Delete</button>
+    </form>
+    <a href="@Url.Action("Index")"><button type="button">Cancel</button></a>
+</div>

@@ -68,59 +68,64 @@ namespace Google_cloud_storage_solution.Controllers
             return View(model);
         }
 
-        // GET: /Menu/DeleteMenu/5
-        [HttpGet]
-        public async Task<IActionResult> DeleteMenu(int id)
+        // Get list of menus for deletion
+        public IActionResult DeleteMenu()
         {
-            var menu = await _context.Menu
-                .Include(m => m.MenuItems)
-                .FirstOrDefaultAsync(m => m.MenuId == id);
-
-            if (menu == null)
-            {
-                return NotFound();
-            }
-
-            return View(menu);
+            var menus = _context.Menu.ToList();
+            return View(menus);
         }
 
-        public async Task<IActionResult> DeleteMenuConfirmed(int id)
+        [HttpPost]
+        public IActionResult DeleteMenu(int id)
         {
-            var menu = await _context.Menu.FindAsync(id);
-            if (menu != null)
+            try
             {
-                _context.Menu.Remove(menu);
-                await _context.SaveChangesAsync();
+                var menu = _context.Menu.Find(id);
+                if (menu != null)
+                {
+                    var relatedItems = _context.MenuItem.Where(mi => mi.MenuId == id).ToList();
+
+                    if (relatedItems.Any())
+                    {
+                        // Handle the case where there are related menu items
+                        ModelState.AddModelError(string.Empty, "An error occurred while trying to delete the menu. Please try again later.");
+
+                    }
+
+                    _context.Menu.Remove(menu);
+                    _context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine(ex.Message);
+                // Provide user feedback
+                ModelState.AddModelError(string.Empty,"An error occurred while trying to delete the menu. Please try again later.");
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("DeleteMenu");
         }
 
-        // GET: /Menu/DeleteMenuItem/5
-        [HttpGet]
-        public async Task<IActionResult> DeleteMenuItem(int id)
+
+        // Get list of menu items for deletion
+        public IActionResult DeleteMenuItem()
         {
-            var menuItem = await _context.MenuItem
-                .FirstOrDefaultAsync(mi => mi.MenuItemId == id);
-
-            if (menuItem == null)
-            {
-                return NotFound();
-            }
-
-            return View(menuItem);
+            var menuItems = _context.MenuItem.ToList();
+            return View(menuItems);
         }
 
-        public async Task<IActionResult> DeleteMenuItemConfirmed(int id)
+        // Delete selected menu item
+        [HttpPost]
+        public IActionResult DeleteMenuItem(int id)
         {
-            var menuItem = await _context.MenuItem.FindAsync(id);
+            var menuItem = _context.MenuItem.Find(id);
             if (menuItem != null)
             {
                 _context.MenuItem.Remove(menuItem);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
-
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("DeleteMenuItem");
         }
     }
 }
